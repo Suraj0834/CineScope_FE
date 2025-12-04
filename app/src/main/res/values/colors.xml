@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base Colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Primary Colors - Deep Blue/Purple -->
+    <color name="md_theme_primary">#6366F1</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#E0E7FF</color>
+    <color name="md_theme_onPrimaryContainer">#1E1B4B</color>
+    
+    <!-- Secondary Colors - Teal/Cyan -->
+    <color name="md_theme_secondary">#14B8A6</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#CCFBF1</color>
+    <color name="md_theme_onSecondaryContainer">#134E4A</color>
+    
+    <!-- Tertiary Colors - Amber/Gold -->
+    <color name="md_theme_tertiary">#F59E0B</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#FEF3C7</color>
+    <color name="md_theme_onTertiaryContainer">#78350F</color>
+    
+    <!-- Error Colors -->
+    <color name="md_theme_error">#EF4444</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_errorContainer">#FEE2E2</color>
+    <color name="md_theme_onErrorContainer">#7F1D1D</color>
+    
+    <!-- Background Colors - Dark Theme -->
+    <color name="md_theme_background">#0F172A</color>
+    <color name="md_theme_onBackground">#E2E8F0</color>
+    
+    <!-- Surface Colors - Dark Theme -->
+    <color name="md_theme_surface">#1E293B</color>
+    <color name="md_theme_onSurface">#E2E8F0</color>
+    <color name="md_theme_surfaceVariant">#334155</color>
+    <color name="md_theme_onSurfaceVariant">#CBD5E1</color>
+    
+    <!-- Outline Colors -->
+    <color name="md_theme_outline">#475569</color>
+    <color name="md_theme_outlineVariant">#334155</color>
+    
+    <!-- Surface Tint -->
+    <color name="md_theme_surfaceTint">#6366F1</color>
+    
+    <!-- Inverse Colors -->
+    <color name="md_theme_inverseSurface">#E2E8F0</color>
+    <color name="md_theme_inverseOnSurface">#1E293B</color>
+    <color name="md_theme_inversePrimary">#4F46E5</color>
+    
+    <!-- Scrim -->
+    <color name="md_theme_scrim">#000000</color>
+    
+    <!-- Custom App Colors -->
+    <color name="rating_gold">#FBBF24</color>
+    <color name="rating_silver">#94A3B8</color>
+    <color name="rating_bronze">#FB923C</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#6366F1</color>
+    <color name="gradient_end">#8B5CF6</color>
+    
+    <!-- Status Colors -->
+    <color name="success">#10B981</color>
+    <color name="warning">#F59E0B</color>
+    <color name="info">#3B82F6</color>
+    
+    <!-- Transparency Overlays -->
+    <color name="overlay_dark">#80000000</color>
+    <color name="overlay_light">#40FFFFFF</color>
+    <color name="scrim_gradient_start">#00000000</color>
+    <color name="scrim_gradient_end">#CC000000</color>
+</resources>

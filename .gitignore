@@ -1,0 +1,83 @@
+# ============================================
+# CineScope Android App - Git Ignore
+# ============================================
+
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+release/
+
+# Gradle files
+.gradle/
+build/
+app/build/
+
+# Local configuration file (contains API keys - NEVER commit!)
+local.properties
+
+# IntelliJ IDEA / Android Studio
+*.iml
+.idea/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+.idea/modules.xml
+.idea/navEditor.xml
+
+# Keystore files (SECURITY - never commit!)
+*.jks
+*.keystore
+
+# External native build
+.externalNativeBuild/
+.cxx/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Kotlin
+.kotlin/
+
+# Captures
+captures/
+
+# Backend folder (separate repository: CineScope_BE)
+backend/
+
+# Documentation files (cleanup - keep only README)
+AILANG_UPDATE.md
+ANDROID_APP_SUMMARY.md
+BACKEND_MIGRATION.md
+BUILD_FIX_GUIDE.md
+COMPLETE_APP_SUMMARY.md
+FINAL_CHECKLIST.md
+QUICK_START_GUIDE.md
+README_AILANG.md
+TEST_REPORT.md
+TMDB_API_REFERENCE.md
+TMDB_API_TEST_REPORT.md
+VISUAL_GUIDE.md
+ui_ux_completion_report.md
+
+# Android folder (if duplicate)
+android/

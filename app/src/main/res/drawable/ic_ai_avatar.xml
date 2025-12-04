@@ -1,0 +1,52 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- Outer Gradient Circle -->
+    <path
+        android:pathData="M24,2
+                          A22,22 0 1,1 24,46
+                          A22,22 0 1,1 24,2z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="24"
+                android:centerY="24"
+                android:gradientRadius="22"
+                android:startColor="#6A5AF9"
+                android:endColor="#2B2D42"/>
+        </aapt:attr>
+    </path>
+
+    <!-- AI Glow Circle -->
+    <path
+        android:pathData="M24,8
+                          A16,16 0 1,1 24,40
+                          A16,16 0 1,1 24,8z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="24"
+                android:centerY="24"
+                android:gradientRadius="16"
+                android:startColor="#A393FF"
+                android:endColor="#6A5AF9"/>
+        </aapt:attr>
+    </path>
+
+    <!-- AI Avatar Icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,12
+                          c-3.31,0 -6,2.69 -6,6
+                          s2.69,6 6,6
+                          s6,-2.69 6,-6
+                          s-2.69,-6 -6,-6z
+                          M24,28
+                          c-4.42,0 -8,2.69 -8,6
+                          v2h16v-2
+                          c0,-3.31 -3.58,-6 -8,-6z"/>
+</vector>
