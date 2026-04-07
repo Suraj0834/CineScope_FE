@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cinescope.app.data.model.ChatMessage
 import com.cinescope.app.databinding.ItemChatMessageUserBinding
 import com.cinescope.app.databinding.ItemChatMessageAiBinding
+import io.noties.markwon.Markwon
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -80,6 +81,10 @@ class ChatAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(ChatDiffCa
         private val binding: ItemChatMessageAiBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        private val markwon: Markwon by lazy {
+            Markwon.create(binding.root.context)
+        }
+
         fun bind(message: ChatMessage) {
             binding.apply {
                 // Show typing indicator or message
@@ -89,7 +94,8 @@ class ChatAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(ChatDiffCa
                 } else {
                     tvMessage.visibility = android.view.View.VISIBLE
                     typingIndicator.visibility = android.view.View.GONE
-                    tvMessage.text = message.message
+                    // Render markdown instead of plain text
+                    markwon.setMarkdown(tvMessage, message.message)
                 }
 
                 // Show timestamp
