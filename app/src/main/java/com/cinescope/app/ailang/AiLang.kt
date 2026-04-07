@@ -2,20 +2,22 @@ package com.cinescope.app.ailang
 
 import android.content.Context
 import android.util.Log
-import kotlinx.coroutines.*
 
+/**
+ * AiLang - Simplified localization system (stub version)
+ *
+ * Translation engine disabled for security (API key removed from app).
+ * For multilingual support, implement server-side translation or use
+ * Android's built-in localization (strings.xml).
+ *
+ * Currently returns keys as-is (English only).
+ */
 object AiLang {
 
     private const val TAG = "AiLang"
-    private lateinit var cacheManager: CacheManager
-    private lateinit var translationEngine: TranslationEngine
-    private lateinit var languageManager: LanguageManager
-    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private var currentLanguage: String = "en"
 
-    private var currentTranslations: Map<String, String> = emptyMap()
-    private var masterTranslations: Map<String, String> = emptyMap()
-
-    // Callback for UI updates
+    // Callback for UI updates (kept for compatibility)
     private val listeners = mutableListOf<() -> Unit>()
 
     fun addListener(listener: () -> Unit) {
@@ -31,83 +33,32 @@ object AiLang {
     }
 
     fun init(context: Context) {
-        cacheManager = CacheManager(context)
-        translationEngine = TranslationEngine()
-        languageManager = LanguageManager(context)
-
-        // Load master file (English)
-        masterTranslations = cacheManager.getMasterFile()
-
-        // Load current language
-        loadLanguage(languageManager.currentLanguage)
+        Log.d(TAG, "AiLang initialized (stub mode - English only)")
+        // Stub implementation - no translation engine
+        currentLanguage = "en"
     }
 
+    /**
+     * Translate function - currently returns key as-is
+     * For production, implement proper localization using Android resources
+     */
     fun t(key: String): String {
-        return currentTranslations[key] ?: masterTranslations[key] ?: key
+        // Stub: Return key as-is (no translation)
+        return key
     }
 
     fun setLanguage(langCode: String) {
-        if (langCode == languageManager.currentLanguage) return
-        
-        // Clear cache for this language to force fresh translation
-        cacheManager.clearCache(langCode)
-        
-        languageManager.currentLanguage = langCode
-        loadLanguage(langCode)
+        Log.d(TAG, "Language change requested to $langCode (ignored - English only)")
+        // Stub: Keep English
+        currentLanguage = "en"
+        notifyListeners()
     }
 
     fun forceRefresh() {
-        cacheManager.clearAllCache()
-        loadLanguage(languageManager.currentLanguage)
+        Log.d(TAG, "Force refresh requested (ignored)")
+        // Stub: Nothing to refresh
+        notifyListeners()
     }
 
-    fun getLanguage(): String = languageManager.currentLanguage
-
-    private fun loadLanguage(langCode: String) {
-        scope.launch(Dispatchers.IO) {
-            if (langCode == "en") {
-                currentTranslations = masterTranslations
-                withContext(Dispatchers.Main) { notifyListeners() }
-                return@launch
-            }
-
-            // 1. Check Cache
-            val cached = cacheManager.getCachedTranslation(langCode)
-            val masterVersion = cacheManager.getVersion(masterTranslations)
-
-            if (cached != null) {
-                val cachedVersion = cacheManager.getVersion(cached)
-                if (cachedVersion >= masterVersion) {
-                    // Cache is up to date
-                    currentTranslations = cached
-                    withContext(Dispatchers.Main) { notifyListeners() }
-                    return@launch
-                }
-            }
-
-            // 2. Need Translation (Cache missing or outdated)
-            Log.d(TAG, "Translating to $langCode...")
-            translationEngine.translate(
-                targetLang = langCode,
-                sourceContent = masterTranslations,
-                onSuccess = { translatedMap ->
-                    // Save to cache
-                    cacheManager.saveTranslation(langCode, translatedMap, masterVersion)
-                    currentTranslations = translatedMap
-                    
-                    scope.launch(Dispatchers.Main) {
-                        notifyListeners()
-                    }
-                },
-                onError = { error ->
-                    Log.e(TAG, "Translation failed: $error")
-                    // Fallback to English or partial cache
-                    if (cached != null) {
-                        currentTranslations = cached
-                        scope.launch(Dispatchers.Main) { notifyListeners() }
-                    }
-                }
-            )
-        }
-    }
+    fun getLanguage(): String = currentLanguage
 }
