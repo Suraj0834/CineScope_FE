@@ -68,6 +68,11 @@ captures/
 # Claude Code internal files
 .claude/
 
+# Test and presentation files
+test-production-api.js
+PRODUCTION_TEST_REPORT.md
+CineScope_Presentation.md
+
 # Documentation files (cleanup - keep only README)
 AILANG_UPDATE.md
 ANDROID_APP_SUMMARY.md

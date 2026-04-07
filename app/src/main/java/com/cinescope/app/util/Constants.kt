@@ -4,8 +4,8 @@ object Constants {
     // Backend Server URL
     // For local testing use: http://10.0.2.2:5001 (Android emulator)
     // For real device on same network: http://192.168.x.x:5001
-    // For production: https://your-backend-domain.com
-    const val BASE_URL = "http://10.0.2.2:5001/"
+    // For production: https://cinescope-be.onrender.com/
+    const val BASE_URL = "https://cinescope-be.onrender.com/"
     
     // Shared Preferences
     const val PREFS_NAME = "cinescope_prefs"
