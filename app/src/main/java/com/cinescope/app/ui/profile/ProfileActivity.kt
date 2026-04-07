@@ -72,20 +72,20 @@ class ProfileActivity : AppCompatActivity() {
         // Apply AiLang translations to all text views
         binding.apply {
             // Toolbar title is set in setupToolbar
-            
+
             // Profile section labels
             tvWatchlistLabel.text = AiLang.t("watchlist")
             tvFavoritesLabel.text = AiLang.t("favorites")
-            
+
             // Settings section
-            tvSettingsLabel.text = AiLang.t("settings")
+            tvSettingsLabel.text = AiLang.t("preferences")
             tvNotificationsLabel.text = AiLang.t("notifications")
             tvDarkModeLabel.text = AiLang.t("dark_mode")
-            
+
             // Language section
             tvLanguageLabel.text = AiLang.t("language")
             btnApplyLanguage.text = AiLang.t("apply_language")
-            
+
             // Buttons
             btnEditProfile.text = AiLang.t("edit_profile")
             btnLogout.text = AiLang.t("logout")
@@ -103,33 +103,47 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnLogout.setOnClickListener {
             showLogoutDialog()
         }
-        
+
         binding.btnEditProfile.setOnClickListener {
             Snackbar.make(binding.root, AiLang.t("edit_profile") + " coming soon", Snackbar.LENGTH_SHORT).show()
         }
-        
+
+        binding.btnSettings.setOnClickListener {
+            Snackbar.make(binding.root, "Settings", Snackbar.LENGTH_SHORT).show()
+        }
+
         binding.cardWatchlist.setOnClickListener {
             startActivity(Intent(this, WatchlistActivity::class.java))
         }
-        
+
         binding.cardFavorites.setOnClickListener {
             startActivity(Intent(this, FavoritesActivity::class.java))
         }
-        
+
         binding.layoutNotifications.setOnClickListener {
             binding.switchNotifications.toggle()
         }
-        
+
         binding.layoutDarkMode.setOnClickListener {
             binding.switchDarkMode.toggle()
         }
-        
+
+        binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            prefManager.setNotificationsEnabled(isChecked)
+            Snackbar.make(
+                binding.root,
+                if (isChecked) "Notifications enabled" else "Notifications disabled",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+
         binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
+            prefManager.setDarkModeEnabled(isChecked)
         }
 
         // Language Apply Button
@@ -142,6 +156,15 @@ class ProfileActivity : AppCompatActivity() {
                 val langCode = languages[selectedLangName] ?: "en"
                 changeLanguage(langCode)
             }
+        }
+
+        // About Section
+        binding.layoutPrivacy.setOnClickListener {
+            Snackbar.make(binding.root, "Privacy Policy - Coming soon", Snackbar.LENGTH_SHORT).show()
+        }
+
+        binding.layoutTerms.setOnClickListener {
+            Snackbar.make(binding.root, "Terms & Conditions - Coming soon", Snackbar.LENGTH_SHORT).show()
         }
     }
 
@@ -217,16 +240,25 @@ class ProfileActivity : AppCompatActivity() {
         binding.apply {
             tvUserName.text = state.user.name
             tvUserEmail.text = state.user.email
-            
+
             tvWatchlistCount.text = state.watchlist.size.toString()
             tvFavoritesCount.text = state.favorites.size.toString()
+
+            // Calculate watch time (mock - 2 hours per movie)
+            val totalMovies = state.watchlist.size + state.favorites.size
+            val watchHours = totalMovies * 2
+            tvWatchTime.text = "${watchHours}h"
+
+            // Load user preferences
+            binding.switchNotifications.isChecked = prefManager.isNotificationsEnabled()
+            binding.switchDarkMode.isChecked = prefManager.isDarkModeEnabled()
         }
     }
     
     private fun showLogoutDialog() {
         MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.logout))
-            .setMessage("Are you sure you want to logout?")
+            .setMessage(getString(R.string.logout_confirmation))
             .setPositiveButton("Yes") { _, _ ->
                 logout()
             }

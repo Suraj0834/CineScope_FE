@@ -2,30 +2,126 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/spacing_md"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp"
     android:gravity="end|top">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
+    <!-- Message Content Container -->
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/corner_radius_lg"
-        app:cardBackgroundColor="@color/md_theme_primary"
-        app:cardElevation="0dp"
-        android:layout_marginStart="48dp">
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="40dp"
+        android:gravity="end">
 
-        <TextView
-            android:id="@+id/tvMessage"
+        <!-- Message Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/spacing_md"
-            android:text="Can you recommend a sci-fi movie?"
-            android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
-            android:textColor="@color/md_theme_onPrimary"
-            android:lineSpacingExtra="4dp" />
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/md_theme_primary"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
 
-    </com.google.android.material.card.MaterialCardView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Message Text -->
+                <TextView
+                    android:id="@+id/tvMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="14dp"
+                    android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
+                    android:textColor="@color/md_theme_onPrimary"
+                    android:lineSpacingExtra="4dp"
+                    android:textSize="14sp"
+                    tools:text="Can you recommend a sci-fi movie?" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Metadata Row (Timestamp + Status) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:orientation="horizontal"
+            android:gravity="end|center_vertical">
+
+            <!-- Timestamp -->
+            <TextView
+                android:id="@+id/tvTimestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:textSize="11sp"
+                android:alpha="0.7"
+                tools:text="2:45 PM" />
+
+            <!-- Message Status Icon (optional - can show sent/delivered/read) -->
+            <ImageView
+                android:id="@+id/ivStatus"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="4dp"
+                android:src="@android:drawable/presence_online"
+                app:tint="@color/md_theme_primary"
+                android:alpha="0.7"
+                android:visibility="gone"
+                android:contentDescription="@string/message_status"
+                tools:visibility="visible" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- User Avatar (Optional) -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/avatarCard"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/md_theme_tertiaryContainer"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- User Profile Image -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivUserAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_person_placeholder"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Cinescope.Circle"
+                tools:src="@tools:sample/avatars" />
+
+            <!-- Fallback: User Initials -->
+            <TextView
+                android:id="@+id/tvUserInitials"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.Cinescope.LabelMedium"
+                android:textColor="@color/md_theme_onTertiaryContainer"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:visibility="gone"
+                tools:text="JD"
+                tools:visibility="gone" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

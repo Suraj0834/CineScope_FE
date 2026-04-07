@@ -72,7 +72,7 @@ class MovieDetailViewModel : BaseViewModel() {
                     }
                 },
                 onError = { error ->
-                    _detailState.value = MovieDetailState.Error(error.message ?: "Failed to load movie details")
+                    _detailState.value = MovieDetailState.Error(getErrorMessage(error))
                 }
             ) {
                 val response = moviesRepository.getMovieDetail(imdbId)
@@ -96,7 +96,7 @@ class MovieDetailViewModel : BaseViewModel() {
                     )
                 },
                 onError = { error ->
-                    _statusState.value = MovieStatusState.Error(error.message ?: "Failed to check status")
+                    _statusState.value = MovieStatusState.Error(getErrorMessage(error))
                 }
             ) {
                 profileRepository.checkMovieStatus(imdbId).getOrThrow()
@@ -118,7 +118,7 @@ class MovieDetailViewModel : BaseViewModel() {
                     _summaryState.value = SummaryState.Success(result.summary)
                 },
                 onError = { error ->
-                    _summaryState.value = SummaryState.Error(error.message ?: "Failed to get AI summary")
+                    _summaryState.value = SummaryState.Error(getErrorMessage(error))
                 }
             ) {
                 aiRepository.getSummary(
@@ -144,7 +144,7 @@ class MovieDetailViewModel : BaseViewModel() {
                     checkMovieStatus(imdbId)
                 },
                 onError = { error ->
-                    _actionMessage.value = error.message ?: "Failed to add to watchlist"
+                    _actionMessage.value = getErrorMessage(error)
                 }
             ) {
                 profileRepository.addToWatchlist(
@@ -170,7 +170,7 @@ class MovieDetailViewModel : BaseViewModel() {
                     checkMovieStatus(imdbId)
                 },
                 onError = { error ->
-                    _actionMessage.value = error.message ?: "Failed to remove from watchlist"
+                    _actionMessage.value = getErrorMessage(error)
                 }
             ) {
                 profileRepository.removeFromWatchlist(imdbId)
@@ -193,7 +193,7 @@ class MovieDetailViewModel : BaseViewModel() {
                     checkMovieStatus(imdbId)
                 },
                 onError = { error ->
-                    _actionMessage.value = error.message ?: "Failed to add to favorites"
+                    _actionMessage.value = getErrorMessage(error)
                 }
             ) {
                 profileRepository.addToFavorites(
@@ -219,7 +219,7 @@ class MovieDetailViewModel : BaseViewModel() {
                     checkMovieStatus(imdbId)
                 },
                 onError = { error ->
-                    _actionMessage.value = error.message ?: "Failed to remove from favorites"
+                    _actionMessage.value = getErrorMessage(error)
                 }
             ) {
                 profileRepository.removeFromFavorites(imdbId)

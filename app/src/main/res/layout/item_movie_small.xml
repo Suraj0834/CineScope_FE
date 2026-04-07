@@ -3,11 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="120dp"
+    android:layout_width="130dp"
     android:layout_height="wrap_content"
     android:layout_marginEnd="12dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
+    android:layout_marginBottom="4dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="0dp"
     app:cardBackgroundColor="@color/md_theme_surface"
     android:foreground="?attr/selectableItemBackground">
 
@@ -15,28 +17,71 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Movie Poster -->
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivPoster"
+        <!-- Movie Poster with Gradient Overlay -->
+        <FrameLayout
+            android:id="@+id/posterContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/movie_poster"
             app:layout_constraintDimensionRatio="2:3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Cinescope.TopRounded"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Rating Badge (smaller) -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivPoster"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/movie_poster"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Cinescope.TopRounded"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <!-- Subtle gradient overlay for depth -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom"
+                android:background="@android:drawable/dialog_holo_dark_frame"
+                android:alpha="0.3" />
+        </FrameLayout>
+
+        <!-- Trending/New Badge (optional - hidden by default) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/trendingBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/md_theme_error"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/tvBadgeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                android:text="@string/trending"
+                android:textSize="8sp"
+                android:textColor="@color/md_theme_onError"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"
+                tools:text="NEW" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Rating Badge -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/ratingBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
-            app:cardCornerRadius="6dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="3dp"
+            app:strokeWidth="0dp"
             app:cardBackgroundColor="@color/md_theme_primaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -46,13 +91,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingHorizontal="6dp"
-                android:paddingVertical="2dp">
+                android:paddingHorizontal="7dp"
+                android:paddingVertical="3dp">
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:src="@android:drawable/star_on"
+                    android:layout_width="11dp"
+                    android:layout_height="11dp"
+                    android:src="@android:drawable/btn_star_big_on"
                     app:tint="@color/rating_gold"
                     android:contentDescription="@string/rating" />
 
@@ -60,43 +105,110 @@
                     android:id="@+id/tvRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:textSize="10sp"
+                    android:layout_marginStart="3dp"
+                    android:textSize="11sp"
                     android:textColor="@color/md_theme_onPrimaryContainer"
                     android:textStyle="bold"
                     tools:text="8.5" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Movie Title -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="12sp"
-            android:textColor="@color/md_theme_onSurface"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:lineSpacingExtra="2dp"
+        <!-- Bookmark/Favorite Icon (optional - hidden by default) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bookmarkCard"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_margin="6dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/md_theme_surface"
+            app:layout_constraintBottom_toBottomOf="@id/posterContainer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivPoster"
-            tools:text="The Shawshank Redemption" />
+            android:visibility="gone"
+            tools:visibility="gone">
 
-        <!-- Year -->
-        <TextView
-            android:id="@+id/tvYear"
+            <ImageView
+                android:id="@+id/ivBookmark"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/btn_star"
+                app:tint="@color/md_theme_primary"
+                android:contentDescription="@string/add_to_watchlist" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Movie Info Section -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
-            android:paddingBottom="8dp"
-            android:textSize="10sp"
-            android:textColor="@color/md_theme_onSurfaceVariant"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:background="@color/md_theme_surface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
-            tools:text="1994" />
+            app:layout_constraintTop_toBottomOf="@id/posterContainer">
+
+            <!-- Movie Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="@color/md_theme_onSurface"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:lineSpacingExtra="2dp"
+                tools:text="The Shawshank Redemption" />
+
+            <!-- Year & Additional Info Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- Year -->
+                <TextView
+                    android:id="@+id/tvYear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="11sp"
+                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    tools:text="1994" />
+
+                <!-- Quality Badge (optional - hidden by default) -->
+                <TextView
+                    android:id="@+id/tvQuality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="1dp"
+                    android:background="@drawable/bg_step_active"
+                    android:textSize="8sp"
+                    android:textColor="@color/md_theme_onPrimary"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:text="HD"
+                    tools:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Genre (optional - hidden by default) -->
+            <TextView
+                android:id="@+id/tvGenre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textSize="10sp"
+                android:textColor="@color/md_theme_primary"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:visibility="gone"
+                tools:text="Drama"
+                tools:visibility="gone" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

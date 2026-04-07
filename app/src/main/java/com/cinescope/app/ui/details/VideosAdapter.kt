@@ -52,7 +52,30 @@ class VideosAdapter(
         fun bind(video: Video) {
             binding.apply {
                 tvVideoTitle.text = video.name
-                
+
+                // Set video type badge
+                tvType.text = video.type.uppercase()
+
+                // Show quality badge if size is available
+                if (video.size != null) {
+                    val quality = when {
+                        video.size >= 2160 -> "4K"
+                        video.size >= 1080 -> "FHD"
+                        video.size >= 720 -> "HD"
+                        else -> "SD"
+                    }
+                    tvQuality.text = quality
+                    qualityBadge.visibility = android.view.View.VISIBLE
+                } else {
+                    qualityBadge.visibility = android.view.View.GONE
+                }
+
+                // Duration badge - not available in API, keep hidden
+                durationBadge.visibility = android.view.View.GONE
+
+                // Metadata - optional, keep hidden for now
+                metadataLayout.visibility = android.view.View.GONE
+
                 // Load YouTube thumbnail
                 // Max resolution: https://img.youtube.com/vi/<video_id>/maxresdefault.jpg
                 // Standard: https://img.youtube.com/vi/<video_id>/hqdefault.jpg

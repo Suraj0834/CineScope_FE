@@ -61,8 +61,12 @@ Thumbs.db
 # Captures
 captures/
 
-# Backend folder (separate repository: CineScope_BE)
-backend/
+# Backend folder (separate repository: CineScope_BE) - only root level
+/backend/
+/CineScope_Be/
+
+# Claude Code internal files
+.claude/
 
 # Documentation files (cleanup - keep only README)
 AILANG_UPDATE.md

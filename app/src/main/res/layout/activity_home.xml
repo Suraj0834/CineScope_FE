@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout 
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background">
+    android:background="@color/md_theme_background"
+    android:fitsSystemWindows="true">
 
+    <!-- Enhanced AppBar with Collapsing Effect -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -15,95 +17,204 @@
         app:elevation="0dp"
         app:liftOnScroll="true">
 
-        <!-- App Title - Scrolls away -->
-        <LinearLayout
+        <!-- Top Bar with Logo and Actions -->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/spacing_lg"
+            android:padding="16dp"
             app:layout_scrollFlags="scroll|enterAlways|snap">
 
-            <TextView
+            <!-- App Logo/Title -->
+            <LinearLayout
+                android:id="@+id/logoLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CineScope"
-                android:textAppearance="@style/TextAppearance.Cinescope.HeadlineMedium"
-                android:textColor="@color/md_theme_onBackground" />
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CineScope"
+                    android:textAppearance="@style/TextAppearance.Cinescope.HeadlineMedium"
+                    android:textColor="@color/md_theme_primary"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvGreeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/discover_amazing_movies"
+                    android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+
+            <!-- Action Icons -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Discover amazing movies"
-                android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
-                android:textColor="@color/md_theme_onSurfaceVariant"
-                android:layout_marginTop="@dimen/spacing_xs" />
-        </LinearLayout>
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Search Bar - Scrolls away -->
-        <com.google.android.material.card.MaterialCardView
+                <!-- AI Chat Button -->
+                <ImageButton
+                    android:id="@+id/btnAiChat"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_dialog_info"
+                    app:tint="@color/md_theme_primary"
+                    android:contentDescription="@string/chat_with_ai" />
+
+                <!-- Notifications Button -->
+                <ImageButton
+                    android:id="@+id/btnNotifications"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_popup_reminder"
+                    app:tint="@color/md_theme_onBackground"
+                    android:contentDescription="@string/notifications" />
+
+                <!-- Profile Button -->
+                <ImageButton
+                    android:id="@+id/btnProfile"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_myplaces"
+                    app:tint="@color/md_theme_onBackground"
+                    android:contentDescription="@string/profile" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Enhanced Search Bar -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/searchCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_lg"
-            android:layout_marginEnd="@dimen/spacing_lg"
-            android:layout_marginBottom="@dimen/spacing_md"
-            app:cardCornerRadius="@dimen/corner_radius_lg"
-            app:cardElevation="@dimen/elevation_sm"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="4dp"
             app:cardBackgroundColor="@color/md_theme_surface"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:strokeWidth="0dp">
+            app:layout_scrollFlags="scroll|enterAlways|snap">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingStart="@dimen/spacing_lg"
-                android:paddingEnd="@dimen/spacing_md">
+                android:paddingStart="20dp"
+                android:paddingEnd="12dp">
 
                 <ImageView
-                    android:layout_width="@dimen/icon_size_md"
-                    android:layout_height="@dimen/icon_size_md"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:src="@android:drawable/ic_menu_search"
                     android:contentDescription="@string/search_icon"
-                    app:tint="@color/md_theme_onSurfaceVariant" />
+                    app:tint="@color/md_theme_primary" />
 
                 <EditText
                     android:id="@+id/etSearch"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginStart="@dimen/spacing_md"
-                    android:layout_marginEnd="@dimen/spacing_sm"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="8dp"
                     android:hint="@string/search_movies"
                     android:background="@null"
                     android:inputType="text"
                     android:imeOptions="actionSearch"
                     android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
                     android:textColor="@color/md_theme_onSurface"
-                    android:textColorHint="@color/md_theme_onSurfaceVariant" />
+                    android:textColorHint="@color/md_theme_onSurfaceVariant"
+                    android:maxLines="1"
+                    android:importantForAutofill="no" />
 
-                <ImageView
-                    android:id="@+id/ivClearSearch"
-                    android:layout_width="@dimen/icon_size_md"
-                    android:layout_height="@dimen/icon_size_md"
-                    android:src="@android:drawable/ic_menu_close_clear_cancel"
-                    android:contentDescription="@string/clear_search"
+                <!-- Voice Search Button -->
+                <ImageButton
+                    android:id="@+id/btnVoiceSearch"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_btn_speak_now"
+                    app:tint="@color/md_theme_onSurfaceVariant"
+                    android:contentDescription="@string/app_name"
                     android:visibility="gone"
-                    android:padding="@dimen/spacing_xs"
-                    app:tint="@color/md_theme_onSurfaceVariant" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    tools:visibility="visible" />
 
-        <!-- Filter Chips - Scrolls away -->
+                <!-- Clear Search Button -->
+                <ImageButton
+                    android:id="@+id/ivClearSearch"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_close_clear_cancel"
+                    app:tint="@color/md_theme_onSurfaceVariant"
+                    android:contentDescription="@string/clear_search"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Filter & Sort Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/trending"
+                android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
+                android:textColor="@color/md_theme_onBackground"
+                android:textStyle="bold" />
+
+            <!-- View Mode Toggle -->
+            <ImageButton
+                android:id="@+id/btnViewMode"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_view"
+                app:tint="@color/md_theme_onBackground"
+                android:contentDescription="@string/app_name" />
+
+            <!-- Filter Button -->
+            <ImageButton
+                android:id="@+id/btnFilter"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_sort_by_size"
+                app:tint="@color/md_theme_onBackground"
+                android:contentDescription="@string/app_name" />
+        </LinearLayout>
+
+        <!-- Filter Chips - Horizontal Scroll -->
         <HorizontalScrollView
+            android:id="@+id/chipScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
-            android:paddingStart="@dimen/spacing_lg"
-            android:paddingEnd="@dimen/spacing_lg"
-            android:paddingBottom="@dimen/spacing_md"
-            android:clipToPadding="false"
-            app:layout_scrollFlags="scroll|enterAlways|snap">
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="12dp"
+            android:clipToPadding="false">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroup"
@@ -111,62 +222,70 @@
                 android:layout_height="wrap_content"
                 app:singleSelection="true"
                 app:selectionRequired="true"
-                app:chipSpacing="@dimen/spacing_sm">
+                app:chipSpacing="8dp"
+                app:singleLine="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipTrending"
-                    style="@style/Widget.Cinescope.Chip.Filter"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/trending"
                     android:checked="true"
-                    app:checkedIconVisible="false"
-                    app:chipIcon="@android:drawable/star_on"
-                    app:chipIconTint="@color/chip_icon_color" />
+                    app:chipIcon="@android:drawable/star_on" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipPopular"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popular" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTopRated"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/top_rated" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipAction"
-                    style="@style/Widget.Cinescope.Chip.Filter"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/action"
-                    app:checkedIconVisible="false" />
+                    android:text="@string/action" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipComedy"
-                    style="@style/Widget.Cinescope.Chip.Filter"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/comedy"
-                    app:checkedIconVisible="false" />
+                    android:text="@string/comedy" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipDrama"
-                    style="@style/Widget.Cinescope.Chip.Filter"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/drama"
-                    app:checkedIconVisible="false" />
+                    android:text="@string/drama" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSciFi"
-                    style="@style/Widget.Cinescope.Chip.Filter"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sci_fi"
-                    app:checkedIconVisible="false" />
+                    android:text="@string/sci_fi" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipThriller"
-                    style="@style/Widget.Cinescope.Chip.Filter"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/thriller"
-                    app:checkedIconVisible="false" />
+                    android:text="@string/thriller" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipWatchlist"
-                    style="@style/Widget.Cinescope.Chip"
+                    style="@style/Widget.Material3.Chip.Assist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/my_watchlist"
@@ -177,7 +296,7 @@
         </HorizontalScrollView>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Main Content -->
+    <!-- Main Content with Pull-to-Refresh -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
@@ -188,72 +307,166 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- Movies Grid -->
+            <!-- Movies Grid/List -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvMovies"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:padding="@dimen/spacing_sm"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:clipToPadding="false"
+                android:scrollbars="vertical"
+                android:fadeScrollbars="true"
+                android:overScrollMode="always"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/item_movie" />
 
-            <!-- Empty State -->
-            <LinearLayout
+            <!-- Enhanced Empty State -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/tvEmpty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:visibility="gone"
+                android:padding="32dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src="@android:drawable/ic_menu_search"
-                    android:alpha="0.3"
-                    app:tint="@color/md_theme_onSurfaceVariant"
-                    android:contentDescription="@string/no_movies" />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no_movies_found"
-                    android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
-                    android:textColor="@color/md_theme_onSurfaceVariant"
-                    android:layout_marginTop="@dimen/spacing_lg" />
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
+                    <!-- Empty State Illustration -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        app:cardBackgroundColor="@color/md_theme_surfaceVariant"
+                        app:cardCornerRadius="70dp"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:src="@android:drawable/ic_menu_search"
+                            android:alpha="0.4"
+                            app:tint="@color/md_theme_onSurfaceVariant"
+                            android:contentDescription="@string/no_movies" />
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/no_movies_found"
+                        android:textAppearance="@style/TextAppearance.Cinescope.TitleLarge"
+                        android:textColor="@color/md_theme_onBackground"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/try_adjusting_search"
+                        android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
+                        android:textColor="@color/md_theme_onSurfaceVariant"
+                        android:gravity="center"
+                        android:paddingHorizontal="16dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnClearFilters"
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/clear_filters"
+                        android:textSize="15sp"
+                        android:paddingHorizontal="32dp"
+                        app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                        app:iconGravity="start"
+                        app:cornerRadius="28dp"
+                        style="@style/Widget.Material3.Button.ElevatedButton" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Loading State -->
+            <FrameLayout
+                android:id="@+id/loadingState"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                android:background="@color/md_theme_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone">
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/try_different_search"
-                    android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
-                    android:textColor="@color/md_theme_onSurfaceVariant"
-                    android:layout_marginTop="@dimen/spacing_sm" />
-            </LinearLayout>
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-            <!-- Loading Indicator -->
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:indeterminateTint="@color/md_theme_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/loading"
+                        android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
+                        android:textColor="@color/md_theme_onSurfaceVariant" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- Load More Progress (at bottom) -->
             <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/progressLoadMore"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"
                 android:visibility="gone"
                 android:indeterminateTint="@color/md_theme_primary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
+                tools:visibility="gone" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- FAB for Quick Actions -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabScrollTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="88dp"
+        android:src="@android:drawable/ic_menu_upload"
+        android:contentDescription="@string/app_name"
+        android:visibility="gone"
+        app:backgroundTint="@color/md_theme_secondaryContainer"
+        app:tint="@color/md_theme_onSecondaryContainer"
+        app:elevation="6dp"
+        tools:visibility="visible" />
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -262,7 +475,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/md_theme_surface"
-        android:elevation="@dimen/elevation_lg"
+        android:elevation="8dp"
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/bottom_nav_color"
         app:itemTextColor="@color/bottom_nav_color"

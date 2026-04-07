@@ -56,10 +56,28 @@ class MoviesSmallAdapter(
             binding.apply {
                 tvTitle.text = movie.title
                 tvYear.text = movie.displayYear
-                
-                // Format rating
+
+                // Format and show rating
                 val rating = movie.voteAverage ?: movie.imdbRating ?: 0.0
-                tvRating.text = String.format("%.1f", rating)
+                if (rating > 0) {
+                    tvRating.text = String.format("%.1f", rating)
+                    ratingBadge.visibility = android.view.View.VISIBLE
+                } else {
+                    ratingBadge.visibility = android.view.View.GONE
+                }
+
+                // Optional: Show genre if available
+                if (!movie.genre.isNullOrEmpty()) {
+                    tvGenre.text = movie.genre
+                    tvGenre.visibility = android.view.View.VISIBLE
+                } else {
+                    tvGenre.visibility = android.view.View.GONE
+                }
+
+                // Hide optional badges by default
+                trendingBadge.visibility = android.view.View.GONE
+                bookmarkCard.visibility = android.view.View.GONE
+                tvQuality.visibility = android.view.View.GONE
 
                 // Load poster using TMDB URL or full URL (OMDb)
                 val posterUrl = if (movie.posterPath != null) {
@@ -71,7 +89,7 @@ class MoviesSmallAdapter(
                 } else {
                     movie.poster // Fallback or placeholder
                 }
-                
+
                 ivPoster.loadImage(posterUrl)
             }
         }

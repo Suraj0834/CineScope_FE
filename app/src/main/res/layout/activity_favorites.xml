@@ -5,97 +5,293 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background">
+    android:background="@color/md_theme_background"
+    android:fitsSystemWindows="true">
 
+    <!-- Scrollable AppBar -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/md_theme_background"
-        app:elevation="0dp">
+        android:elevation="0dp"
+        app:liftOnScroll="true">
 
+        <!-- Toolbar with Actions -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/my_favorites"
             app:titleTextColor="@color/md_theme_onBackground"
-            app:navigationIcon="@drawable/ic_back" />
+            app:navigationIcon="@drawable/ic_back"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-        <!-- Stats Card -->
-        <com.google.android.material.card.MaterialCardView
+            <!-- Search Icon -->
+            <ImageButton
+                android:id="@+id/btnSearch"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_search"
+                app:tint="@color/md_theme_onBackground"
+                android:contentDescription="@string/search_movies" />
+
+            <!-- View Switcher (Grid/List) -->
+            <ImageButton
+                android:id="@+id/btnViewSwitcher"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_view"
+                app:tint="@color/md_theme_onBackground"
+                android:contentDescription="@string/app_name" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <!-- Enhanced Stats Cards -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/statsCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_lg"
-            app:cardCornerRadius="@dimen/corner_radius_lg"
-            app:cardElevation="@dimen/elevation_sm"
-            app:cardBackgroundColor="@color/md_theme_tertiaryContainer">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="@color/md_theme_primaryContainer"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:layout_scrollFlags="scroll">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/spacing_lg"
-                android:gravity="center">
+                android:orientation="vertical"
+                android:padding="20dp">
 
+                <!-- Stats Row -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/tvTotalFavorites"
-                        android:layout_width="wrap_content"
+                    <!-- Total Movies Stat -->
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Cinescope.HeadlineSmall"
-                        android:textColor="@color/md_theme_onTertiaryContainer"
-                        android:textStyle="bold"
-                        tools:text="18" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@android:drawable/btn_star_big_on"
+                            app:tint="@color/rating_gold"
+                            android:contentDescription="@string/app_name" />
+
+                        <TextView
+                            android:id="@+id/tvTotalFavorites"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textAppearance="@style/TextAppearance.Cinescope.HeadlineSmall"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textStyle="bold"
+                            tools:text="18" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/total_movies"
+                            android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:alpha="0.8" />
+                    </LinearLayout>
+
+                    <!-- Average Rating Stat -->
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="@string/favorite_movies"
-                        android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
-                        android:textColor="@color/md_theme_onTertiaryContainer" />
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/md_theme_outline" />
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@android:drawable/btn_star"
+                            app:tint="@color/md_theme_primary"
+                            android:contentDescription="@string/app_name" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                        <TextView
+                            android:id="@+id/tvAvgRating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textAppearance="@style/TextAppearance.Cinescope.HeadlineSmall"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textStyle="bold"
+                            tools:text="8.2" />
 
-                    <TextView
-                        android:id="@+id/tvAvgRating"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/avg_rating"
+                            android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:alpha="0.8" />
+                    </LinearLayout>
+
+                    <!-- Watch Time Stat -->
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.Cinescope.HeadlineSmall"
-                        android:textColor="@color/md_theme_onTertiaryContainer"
-                        android:textStyle="bold"
-                        tools:text="8.2" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="@string/avg_rating"
-                        android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
-                        android:textColor="@color/md_theme_onTertiaryContainer" />
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@android:drawable/ic_menu_recent_history"
+                            app:tint="@color/md_theme_secondary"
+                            android:contentDescription="@string/app_name" />
+
+                        <TextView
+                            android:id="@+id/tvWatchTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textAppearance="@style/TextAppearance.Cinescope.HeadlineSmall"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textStyle="bold"
+                            tools:text="24h" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/watch_time"
+                            android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:alpha="0.8" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Filter & Sort Section -->
+        <LinearLayout
+            android:id="@+id/filterSortSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@color/md_theme_background">
+
+            <!-- Sort Options -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/sort_by"
+                    android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
+                    android:textColor="@color/md_theme_onBackground"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSortOptions"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/date_added"
+                    android:textColor="@color/md_theme_primary"
+                    app:icon="@android:drawable/arrow_down_float"
+                    app:iconGravity="end"
+                    app:iconTint="@color/md_theme_primary" />
+            </LinearLayout>
+
+            <!-- Filter Chips -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clipToPadding="false">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupFilters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleLine="true"
+                    app:chipSpacing="8dp"
+                    app:selectionRequired="false">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all_genres"
+                        android:checked="true"
+                        style="@style/Widget.Material3.Chip.Filter" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action"
+                        style="@style/Widget.Material3.Chip.Filter" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipComedy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/comedy"
+                        style="@style/Widget.Material3.Chip.Filter" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipDrama"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/drama"
+                        style="@style/Widget.Material3.Chip.Filter" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipSciFi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sci_fi"
+                        style="@style/Widget.Material3.Chip.Filter" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipThriller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/thriller"
+                        style="@style/Widget.Material3.Chip.Filter" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Main Content -->
+    <!-- Main Content with Pull-to-Refresh -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
@@ -106,80 +302,155 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- Movies Grid -->
+            <!-- Movies Grid/List -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFavorites"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:padding="@dimen/spacing_sm"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:clipToPadding="false"
+                android:scrollbars="vertical"
+                android:fadeScrollbars="true"
+                android:overScrollMode="always"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/item_movie" />
 
-            <!-- Empty State -->
-            <LinearLayout
+            <!-- Enhanced Empty State -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/emptyState"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:visibility="gone"
+                android:padding="32dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible">
 
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src="@android:drawable/btn_star_big_on"
-                    android:alpha="0.3"
-                    app:tint="@color/rating_gold"
-                    android:contentDescription="@string/empty_favorites" />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_lg"
-                    android:text="@string/no_favorites_yet"
-                    android:textAppearance="@style/TextAppearance.Cinescope.TitleLarge"
-                    android:textColor="@color/md_theme_onSurfaceVariant" />
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
-                    android:text="@string/mark_movies_favorite"
-                    android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
-                    android:textColor="@color/md_theme_onSurfaceVariant"
-                    android:gravity="center" />
+                    <!-- Empty State Illustration -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        app:cardBackgroundColor="@color/md_theme_surfaceVariant"
+                        app:cardCornerRadius="70dp"
+                        app:cardElevation="0dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnExploreMovies"
-                    style="@style/Widget.Cinescope.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_xl"
-                    android:text="@string/explore_movies"
-                    app:icon="@android:drawable/ic_menu_search" />
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:src="@android:drawable/btn_star_big_on"
+                            android:alpha="0.4"
+                            app:tint="@color/rating_gold"
+                            android:contentDescription="@string/empty_favorites" />
+                    </androidx.cardview.widget.CardView>
 
-            <!-- Loading Indicator -->
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/no_favorites_yet"
+                        android:textAppearance="@style/TextAppearance.Cinescope.TitleLarge"
+                        android:textColor="@color/md_theme_onBackground"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/mark_movies_favorite"
+                        android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
+                        android:textColor="@color/md_theme_onSurfaceVariant"
+                        android:gravity="center"
+                        android:paddingHorizontal="16dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnExploreMovies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/explore_movies"
+                        android:textSize="15sp"
+                        android:paddingHorizontal="32dp"
+                        app:icon="@android:drawable/ic_menu_search"
+                        app:iconGravity="start"
+                        app:cornerRadius="28dp"
+                        style="@style/Widget.Material3.Button.ElevatedButton" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Loading State -->
+            <FrameLayout
+                android:id="@+id/loadingState"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:visibility="gone"
-                android:indeterminateTint="@color/md_theme_primary"
+                android:background="@color/md_theme_background"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:indeterminateTint="@color/md_theme_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/loading_favorites"
+                        android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
+                        android:textColor="@color/md_theme_onSurfaceVariant" />
+                </LinearLayout>
+            </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Floating Action Button for Quick Actions -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabQuickAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="88dp"
+        android:text="@string/add_movies"
+        android:textColor="@color/md_theme_onPrimary"
+        app:icon="@android:drawable/ic_input_add"
+        app:iconTint="@color/md_theme_onPrimary"
+        app:backgroundTint="@color/md_theme_primary"
+        app:elevation="6dp"
+        app:hoveredFocusedTranslationZ="8dp"
+        app:pressedTranslationZ="12dp"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -188,7 +459,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/md_theme_surface"
-        android:elevation="@dimen/elevation_lg"
+        android:elevation="8dp"
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/bottom_nav_color"
         app:itemTextColor="@color/bottom_nav_color"

@@ -38,10 +38,14 @@ class ChatActivity : AppCompatActivity() {
     }
     
     private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.setNavigationOnClickListener {
+        // Setup back button click listener
+        binding.btnBack.setOnClickListener {
             finish()
+        }
+
+        // Setup menu button (optional - can add menu options)
+        binding.btnMenu.setOnClickListener {
+            // TODO: Show menu options
         }
     }
     

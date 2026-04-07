@@ -129,10 +129,25 @@ class MovieDetailActivity : AppCompatActivity() {
     }
     
     private fun setupViews() {
+        // Play Trailer FAB
+        binding.fabPlayTrailer.setOnClickListener {
+            playFirstTrailer()
+        }
+
+        // Share Button
+        binding.btnShare.setOnClickListener {
+            shareMovie()
+        }
+
+        // More Options Button
+        binding.btnMore.setOnClickListener {
+            showMoreOptions()
+        }
+
         binding.btnAiSummary.setOnClickListener {
             viewModel.getAiSummary()
         }
-        
+
         binding.btnWatchlist.setOnClickListener {
             val isInWatchlist = (viewModel.statusState.value as? MovieStatusState.Success)?.isInWatchlist ?: false
             if (isInWatchlist) {
@@ -141,7 +156,7 @@ class MovieDetailActivity : AppCompatActivity() {
                 viewModel.addToWatchlist()
             }
         }
-        
+
         binding.btnFavorite.setOnClickListener {
             val isFavorite = (viewModel.statusState.value as? MovieStatusState.Success)?.isInFavorites ?: false
             if (isFavorite) {
@@ -150,15 +165,79 @@ class MovieDetailActivity : AppCompatActivity() {
                 viewModel.addToFavorites()
             }
         }
-        
+
         binding.fabChat.setOnClickListener {
             openChatActivity()
         }
-        
+
         binding.btnViewAllCast.setOnClickListener {
             // Could open a full cast list activity, for now just show a toast or expand
             Snackbar.make(binding.root, "Full cast list coming soon", Snackbar.LENGTH_SHORT).show()
         }
+    }
+
+    /**
+     * Play the first available trailer
+     */
+    private fun playFirstTrailer() {
+        val state = viewModel.detailState.value
+        if (state is MovieDetailState.Success) {
+            val videos = state.movieDetail.videos
+            if (!videos.isNullOrEmpty()) {
+                val firstVideo = videos.first()
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=${firstVideo.key}"))
+                startActivity(intent)
+            } else {
+                Snackbar.make(binding.root, "No trailers available", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * Share movie with others
+     */
+    private fun shareMovie() {
+        val state = viewModel.detailState.value
+        if (state is MovieDetailState.Success) {
+            val movie = state.movieDetail
+            val shareText = """
+                Check out this movie: ${movie.title}
+                Rating: ${movie.displayRating}
+
+                https://www.imdb.com/title/${movie.imdbId}
+            """.trimIndent()
+
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, movie.title)
+                putExtra(Intent.EXTRA_TEXT, shareText)
+            }
+            startActivity(Intent.createChooser(shareIntent, "Share ${movie.title}"))
+        }
+    }
+
+    /**
+     * Show more options menu
+     */
+    private fun showMoreOptions() {
+        val options = arrayOf(
+            "Add to Watchlist",
+            "Mark as Favorite",
+            "Share",
+            "Report an Issue"
+        )
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle("More Options")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> binding.btnWatchlist.performClick()
+                    1 -> binding.btnFavorite.performClick()
+                    2 -> shareMovie()
+                    3 -> Snackbar.make(binding.root, "Report feature coming soon", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+            .show()
     }
     
     private fun openChatActivity() {
@@ -334,13 +413,49 @@ class MovieDetailActivity : AppCompatActivity() {
     private fun showAiSummaryDialog(summary: String) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_ai_summary, null)
         val tvSummaryContent = dialogView.findViewById<android.widget.TextView>(R.id.tvSummaryContent)
+        val btnCopy = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCopy)
+        val btnShare = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnShare)
+        val btnClose = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnClose)
+
         tvSummaryContent.text = summary
-        
-        MaterialAlertDialogBuilder(this, R.style.Widget_Cinescope_AlertDialog)
-            .setTitle("🤖 AI Movie Summary")
+
+        val dialog = MaterialAlertDialogBuilder(this)
             .setView(dialogView)
-            .setPositiveButton("Close", null)
-            .show()
+            .create()
+
+        // Copy button
+        btnCopy.setOnClickListener {
+            val clipboard = getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clip = android.content.ClipData.newPlainText("AI Summary", summary)
+            clipboard.setPrimaryClip(clip)
+            Snackbar.make(binding.root, "Summary copied to clipboard", Snackbar.LENGTH_SHORT).show()
+        }
+
+        // Share button
+        btnShare.setOnClickListener {
+            val movieDetail = (viewModel.detailState.value as? MovieDetailState.Success)?.movieDetail
+            val shareText = """
+                AI Summary for ${movieDetail?.title ?: movieTitle}
+
+                $summary
+
+                Generated by CineScope AI
+            """.trimIndent()
+
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "AI Summary: ${movieDetail?.title ?: movieTitle}")
+                putExtra(Intent.EXTRA_TEXT, shareText)
+            }
+            startActivity(Intent.createChooser(shareIntent, "Share AI Summary"))
+        }
+
+        // Close button
+        btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
     
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

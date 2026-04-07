@@ -22,9 +22,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        
-        // Gemini API Key from local.properties (secured)
-        buildConfigField("String", "GEMINI_API_KEY", "\"${localProperties.getProperty("GEMINI_API_KEY", "")}\"")
+
+        // SECURITY: API keys removed from Android app
+        // All AI features should use backend API endpoints
+        // buildConfigField("String", "GEMINI_API_KEY", "\"\"")  // Removed for security
     }
 
     buildTypes {

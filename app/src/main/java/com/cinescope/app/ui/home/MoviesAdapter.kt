@@ -52,13 +52,44 @@ class MoviesAdapter(
             binding.apply {
                 tvTitle.text = movie.title
                 tvYear.text = movie.displayYear
-                
-                // Format rating
+
+                // Format and show rating
                 val rating = movie.voteAverage ?: movie.imdbRating ?: 0.0
-                tvRating.text = String.format("%.1f", rating)
-                
-                // Set genre if available
-                tvGenre.text = movie.genre ?: "Movie"
+                if (rating > 0) {
+                    tvRating.text = String.format("%.1f", rating)
+                    ratingBadge.visibility = android.view.View.VISIBLE
+                } else {
+                    ratingBadge.visibility = android.view.View.GONE
+                }
+
+                // Set genre
+                if (!movie.genre.isNullOrEmpty()) {
+                    tvGenre.text = movie.genre
+                    dotSeparator1.visibility = android.view.View.VISIBLE
+                } else {
+                    tvGenre.text = "Movie"
+                    dotSeparator1.visibility = android.view.View.VISIBLE
+                }
+
+                // Runtime not available in Movie model (only in MovieDetail)
+                tvRuntime.visibility = android.view.View.GONE
+                dotSeparator2.visibility = android.view.View.GONE
+
+                // Optional: Show popularity/vote count
+                if (movie.voteCount != null && movie.voteCount > 0) {
+                    val votes = when {
+                        movie.voteCount >= 1000 -> String.format("%.1fK votes", movie.voteCount / 1000.0)
+                        else -> "${movie.voteCount} votes"
+                    }
+                    tvPopularity.text = votes
+                    popularityLayout.visibility = android.view.View.VISIBLE
+                } else {
+                    popularityLayout.visibility = android.view.View.GONE
+                }
+
+                // Hide optional badges by default
+                trendingBadge.visibility = android.view.View.GONE
+                quickActionsLayout.visibility = android.view.View.GONE
 
                 // Load poster using TMDB URL or full URL (OMDb)
                 val posterUrl = if (movie.posterPath != null) {
@@ -70,7 +101,7 @@ class MoviesAdapter(
                 } else {
                     movie.poster // Fallback or placeholder
                 }
-                
+
                 ivPoster.loadImage(posterUrl)
             }
         }

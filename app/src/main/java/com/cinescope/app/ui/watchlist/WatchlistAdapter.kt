@@ -59,9 +59,31 @@ class WatchlistAdapter(
         fun bind(item: WatchlistItem) {
             binding.apply {
                 tvTitle.text = item.title
-                // Year is not in WatchlistItem, could parse from addedAt or just hide/show added date
-                tvYear.text = "Added: ${item.addedAt.take(10)}"
 
+                // Try to extract year from title if it's in format "Title (YYYY)"
+                val yearRegex = "\\((\\d{4})\\)".toRegex()
+                val yearMatch = yearRegex.find(item.title)
+                if (yearMatch != null) {
+                    tvYear.text = yearMatch.groupValues[1]
+                    dotSeparator.visibility = android.view.View.GONE
+                    tvGenre.visibility = android.view.View.GONE
+                } else {
+                    tvYear.visibility = android.view.View.GONE
+                    dotSeparator.visibility = android.view.View.GONE
+                    tvGenre.visibility = android.view.View.GONE
+                }
+
+                // Show added date
+                val addedDate = item.addedAt.take(10) // YYYY-MM-DD format
+                tvAddedDate.text = "Added $addedDate"
+                addedDateLayout.visibility = android.view.View.VISIBLE
+
+                // Hide optional badges (no data available in WatchlistItem)
+                ratingBadge.visibility = android.view.View.GONE
+                priorityBadge.visibility = android.view.View.GONE
+                btnMarkWatched.visibility = android.view.View.GONE
+
+                // Load poster
                 val posterUrl = if (item.posterPath != null) {
                     if (item.posterPath.startsWith("http")) {
                         item.posterPath
@@ -71,7 +93,7 @@ class WatchlistAdapter(
                 } else {
                     null
                 }
-                
+
                 ivPoster.loadImage(posterUrl)
             }
         }

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cinescope.app.R
 import com.cinescope.app.databinding.ActivityPersonDetailBinding
 import com.cinescope.app.ui.details.MovieDetailActivity
 import com.cinescope.app.ui.common.MoviesSmallAdapter
@@ -16,15 +17,19 @@ import com.cinescope.app.util.loadImage
 import com.cinescope.app.util.visible
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 class PersonDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonDetailBinding
     private lateinit var viewModel: PersonDetailViewModel
     private lateinit var filmographyAdapter: MoviesSmallAdapter
-    
+
     private var personId: Int = -1
     private var personName: String = ""
+    private var isBiographyExpanded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +43,7 @@ class PersonDetailActivity : AppCompatActivity() {
 
         setupToolbar()
         setupRecyclerView()
+        setupViews()
         observeViewModel()
 
         if (personId != -1) {
@@ -65,10 +71,85 @@ class PersonDetailActivity : AppCompatActivity() {
             intent.putExtra(Constants.EXTRA_MOVIE_TITLE, movie.title)
             startActivity(intent)
         }
-        
+
         binding.rvFilmography.apply {
             layoutManager = LinearLayoutManager(this@PersonDetailActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = filmographyAdapter
+        }
+    }
+
+    private fun setupViews() {
+        // Share Button
+        binding.btnShare.setOnClickListener {
+            sharePerson()
+        }
+
+        // Favorite Button
+        binding.btnFavorite.setOnClickListener {
+            Snackbar.make(binding.root, "Favorite feature coming soon", Snackbar.LENGTH_SHORT).show()
+        }
+
+        // Read More/Less Button
+        binding.btnReadMore.setOnClickListener {
+            toggleBiography()
+        }
+
+        // View All Filmography
+        binding.btnViewAll.setOnClickListener {
+            Snackbar.make(binding.root, "Full filmography coming soon", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * Share person details
+     */
+    private fun sharePerson() {
+        val shareText = """
+            Check out ${personName}
+
+            View more details in CineScope AI
+        """.trimIndent()
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, personName)
+            putExtra(Intent.EXTRA_TEXT, shareText)
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share $personName"))
+    }
+
+    /**
+     * Toggle biography read more/less
+     */
+    private fun toggleBiography() {
+        isBiographyExpanded = !isBiographyExpanded
+        binding.tvBiography.maxLines = if (isBiographyExpanded) Int.MAX_VALUE else 5
+        binding.btnReadMore.apply {
+            text = if (isBiographyExpanded) {
+                getString(R.string.read_less)
+            } else {
+                getString(R.string.read_more)
+            }
+            icon = if (isBiographyExpanded) {
+                getDrawable(android.R.drawable.arrow_up_float)
+            } else {
+                getDrawable(android.R.drawable.arrow_down_float)
+            }
+        }
+    }
+
+    /**
+     * Calculate age from birthday
+     */
+    private fun calculateAge(birthday: String?): Int {
+        if (birthday.isNullOrEmpty() || birthday == "Unknown") return 0
+
+        return try {
+            val birthDate = LocalDate.parse(birthday, DateTimeFormatter.ISO_LOCAL_DATE)
+            val today = LocalDate.now()
+            Period.between(birthDate, today).years
+        } catch (e: Exception) {
+            0
         }
     }
 
@@ -111,8 +192,14 @@ class PersonDetailActivity : AppCompatActivity() {
                             }
                             filmographyAdapter.submitList(movies)
                             binding.rvFilmography.visible()
+                            binding.emptyFilmography.gone()
+
+                            // Update movies count
+                            binding.tvMoviesCount.text = movies.size.toString()
                         } else {
                             binding.rvFilmography.gone()
+                            binding.emptyFilmography.visible()
+                            binding.tvMoviesCount.text = "0"
                         }
                     }
                     else -> {}
@@ -132,11 +219,36 @@ class PersonDetailActivity : AppCompatActivity() {
                 null
             }
             ivProfile.loadImage(profileUrl)
-            
+            ivProfileBackground.loadImage(profileUrl) // Same image for background
+
+            // Name and Known For
             tvName.text = person.name
-            tvKnownFor.text = person.knownForDepartment
-            tvBiography.text = if (!person.biography.isNullOrEmpty()) person.biography else "No biography available."
-            
+            chipKnownFor.text = person.knownForDepartment ?: "Acting"
+            tvKnownFor.text = person.knownForDepartment ?: "Acting"
+
+            // Calculate and display age
+            val age = calculateAge(person.birthday)
+            tvAge.text = if (age > 0) age.toString() else "-"
+
+            // Popularity
+            tvPopularity.text = person.popularity?.let { String.format("%.1f", it) } ?: "-"
+
+            // Biography
+            val biography = if (!person.biography.isNullOrEmpty()) {
+                person.biography
+            } else {
+                "No biography available."
+            }
+            tvBiography.text = biography
+
+            // Show/hide read more button based on biography length
+            if (biography.length < 250) {
+                btnReadMore.gone()
+            } else {
+                btnReadMore.visible()
+            }
+
+            // Personal Info
             tvBirthday.text = person.birthday ?: "Unknown"
             tvPlaceOfBirth.text = person.placeOfBirth ?: "Unknown"
         }

@@ -66,9 +66,7 @@ class HomeViewModel : BaseViewModel() {
                 }
                 .onFailure { error ->
                     isLoadingPage = false
-                    _homeState.value = HomeState.Error(
-                        error.message ?: "Failed to load movies. Please try again."
-                    )
+                    _homeState.value = HomeState.Error(getErrorMessage(error))
                 }
         }
     }
@@ -110,9 +108,7 @@ class HomeViewModel : BaseViewModel() {
                 }
                 .onFailure { error ->
                     isLoadingPage = false
-                    _homeState.value = HomeState.Error(
-                        error.message ?: "Failed to load movies. Please try again."
-                    )
+                    _homeState.value = HomeState.Error(getErrorMessage(error))
                 }
         }
     }
@@ -154,9 +150,7 @@ class HomeViewModel : BaseViewModel() {
                 }
                 .onFailure { error ->
                     isLoadingPage = false
-                    _homeState.value = HomeState.Error(
-                        error.message ?: "Failed to load movies. Please try again."
-                    )
+                    _homeState.value = HomeState.Error(getErrorMessage(error))
                 }
         }
     }
@@ -177,9 +171,7 @@ class HomeViewModel : BaseViewModel() {
                     }
                 }
                 .onFailure { error ->
-                    _homeState.value = HomeState.Error(
-                        error.message ?: "Search failed. Please try again."
-                    )
+                    _homeState.value = HomeState.Error(getErrorMessage(error))
                 }
         }
     }
@@ -205,9 +197,7 @@ class HomeViewModel : BaseViewModel() {
                     }
                 }
                 .onFailure { error ->
-                    _homeState.value = HomeState.Error(
-                        error.message ?: "Discovery failed. Please try again."
-                    )
+                    _homeState.value = HomeState.Error(getErrorMessage(error))
                 }
         }
     }

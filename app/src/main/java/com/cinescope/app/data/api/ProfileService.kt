@@ -32,7 +32,7 @@ interface ProfileService {
         @Body request: UpdateListRequest
     ): ApiResponse<Any>
     
-    @GET("api/profile/check/{imdbId}")
+    @GET("api/profile/status/{imdbId}")
     suspend fun checkMovieStatus(
         @Path("imdbId") imdbId: String
     ): ApiResponse<MovieStatusResponse>

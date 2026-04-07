@@ -56,18 +56,71 @@ class ChatAdapter : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(ChatDiffCa
     class UserMessageViewHolder(
         private val binding: ItemChatMessageUserBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        
+
         fun bind(message: ChatMessage) {
-            binding.tvMessage.text = message.message
+            binding.apply {
+                // Set message text
+                tvMessage.text = message.message
+
+                // Show timestamp
+                tvTimestamp.text = formatTime(message.timestamp)
+
+                // Optional: Show message status (can be extended to show sent/delivered/read status)
+                // For now, keep it hidden or show a simple indicator
+                ivStatus.visibility = android.view.View.GONE
+
+                // Optional: Show user avatar
+                // For now, keep it hidden - can be shown if user profile data is available
+                avatarCard.visibility = android.view.View.GONE
+            }
         }
     }
     
     class AiMessageViewHolder(
         private val binding: ItemChatMessageAiBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        
+
         fun bind(message: ChatMessage) {
-            binding.tvMessage.text = message.message
+            binding.apply {
+                // Show typing indicator or message
+                if (message.isTyping) {
+                    tvMessage.visibility = android.view.View.GONE
+                    typingIndicator.visibility = android.view.View.VISIBLE
+                } else {
+                    tvMessage.visibility = android.view.View.VISIBLE
+                    typingIndicator.visibility = android.view.View.GONE
+                    tvMessage.text = message.message
+                }
+
+                // Show timestamp
+                tvTimestamp.text = formatTime(message.timestamp)
+
+                // Copy button
+                btnCopy.setOnClickListener {
+                    val clipboard = root.context.getSystemService(android.content.Context.CLIPBOARD_SERVICE)
+                        as android.content.ClipboardManager
+                    val clip = android.content.ClipData.newPlainText("AI Message", message.message)
+                    clipboard.setPrimaryClip(clip)
+
+                    // Show feedback
+                    com.google.android.material.snackbar.Snackbar.make(
+                        root,
+                        "Message copied",
+                        com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+
+                // Share button
+                btnShare.setOnClickListener {
+                    val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(android.content.Intent.EXTRA_TEXT, message.message)
+                    }
+                    root.context.startActivity(
+                        android.content.Intent.createChooser(shareIntent, "Share AI Response")
+                    )
+                }
+            }
         }
     }
     

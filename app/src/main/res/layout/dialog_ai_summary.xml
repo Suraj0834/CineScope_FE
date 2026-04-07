@@ -1,58 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxHeight="400dp">
+    android:orientation="vertical"
+    android:background="@color/md_theme_surface">
 
+    <!-- Header Section with Gradient -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/spacing_lg">
+        android:background="@color/md_theme_primaryContainer"
+        android:padding="20dp"
+        android:gravity="center">
 
-        <!-- AI Icon Header -->
+        <!-- AI Icon Circle -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:cardCornerRadius="32dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/md_theme_primary">
+
+            <ImageView
+                android:id="@+id/ivAiIcon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_dialog_info"
+                app:tint="@color/md_theme_onPrimary"
+                android:contentDescription="@string/ai_summary" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/ai_movie_summary"
+            android:textAppearance="@style/TextAppearance.Cinescope.TitleLarge"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textStyle="bold" />
+
+        <!-- Powered by text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/powered_by_gemini"
+            android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:alpha="0.8" />
+    </LinearLayout>
+
+    <!-- Content Section -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="320dp"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="@dimen/spacing_md">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@android:drawable/ic_dialog_info"
-                app:tint="@color/md_theme_primary"
-                android:contentDescription="AI" />
+            <!-- Summary Content Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="@color/md_theme_surfaceVariant"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Summary Label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/summary"
+                        android:textAppearance="@style/TextAppearance.Cinescope.LabelLarge"
+                        android:textColor="@color/md_theme_primary"
+                        android:textStyle="bold" />
+
+                    <!-- Summary Text -->
+                    <TextView
+                        android:id="@+id/tvSummaryContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
+                        android:textColor="@color/md_theme_onSurface"
+                        android:lineSpacingExtra="4dp"
+                        tools:text="This is a compelling story about..." />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Key Points Section (Optional) -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_sm"
-                android:text="Powered by Gemini AI"
-                android:textAppearance="@style/TextAppearance.Cinescope.LabelMedium"
-                android:textColor="@color/md_theme_primary" />
-        </LinearLayout>
+                android:layout_marginTop="16dp"
+                android:text="@string/key_points"
+                android:textAppearance="@style/TextAppearance.Cinescope.LabelLarge"
+                android:textColor="@color/md_theme_onSurface"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:visibility="gone" />
 
-        <!-- Summary Content -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/corner_radius_md"
-            app:cardBackgroundColor="@color/md_theme_surfaceVariant"
-            app:cardElevation="0dp">
-
-            <TextView
-                android:id="@+id/tvSummaryContent"
+            <!-- Disclaimer -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_md"
-                android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
-                android:textColor="@color/md_theme_onSurface"
-                android:lineSpacingExtra="4dp" />
-        </com.google.android.material.card.MaterialCardView>
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@color/md_theme_secondaryContainer">
 
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@android:drawable/ic_dialog_info"
+                    app:tint="@color/md_theme_onSecondaryContainer"
+                    android:alpha="0.7"
+                    android:contentDescription="@string/info" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/ai_disclaimer"
+                    android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                    android:textColor="@color/md_theme_onSecondaryContainer"
+                    android:alpha="0.8" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="end">
+
+        <!-- Copy Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/copy"
+            android:textSize="14sp"
+            app:icon="@android:drawable/ic_menu_save"
+            app:iconSize="18dp"
+            app:cornerRadius="12dp"
+            style="@style/Widget.Material3.Button.TextButton" />
+
+        <!-- Share Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnShare"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/share"
+            android:textSize="14sp"
+            app:icon="@android:drawable/ic_menu_share"
+            app:iconSize="18dp"
+            app:cornerRadius="12dp"
+            style="@style/Widget.Material3.Button.TextButton" />
+
+        <!-- Close Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/close"
+            android:textSize="14sp"
+            app:cornerRadius="12dp"
+            style="@style/Widget.Material3.Button" />
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

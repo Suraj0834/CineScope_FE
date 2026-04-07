@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.cinescope.app.R
 import com.cinescope.app.ailang.AiLang
 import com.cinescope.app.databinding.ActivityWatchlistBinding
 import com.cinescope.app.ui.details.MovieDetailActivity
@@ -16,15 +19,17 @@ import com.cinescope.app.ui.profile.ProfileActivity
 import com.cinescope.app.util.Constants
 import com.cinescope.app.util.gone
 import com.cinescope.app.util.visible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import com.cinescope.app.R
 
 class WatchlistActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWatchlistBinding
     private lateinit var viewModel: WatchlistViewModel
     private lateinit var adapter: WatchlistAdapter
+
+    private var isGridView = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,11 +82,104 @@ class WatchlistActivity : AppCompatActivity() {
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadWatchlist()
         }
-        
+
         binding.btnBrowseMovies.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
         }
+
+        // View mode toggle
+        binding.btnViewMode.setOnClickListener {
+            toggleViewMode()
+        }
+
+        // Search button
+        binding.btnSearch.setOnClickListener {
+            Snackbar.make(binding.root, "Search functionality coming soon", Snackbar.LENGTH_SHORT).show()
+        }
+
+        // Filter/Sort button
+        binding.btnFilter.setOnClickListener {
+            showSortDialog()
+        }
+
+        // FAB scroll to top
+        binding.fabScrollTop.setOnClickListener {
+            binding.rvWatchlist.smoothScrollToPosition(0)
+        }
+
+        // Show/hide FAB based on scroll
+        binding.rvWatchlist.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager
+                val firstVisiblePosition = when (layoutManager) {
+                    is GridLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+                    is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition()
+                    else -> 0
+                }
+
+                if (firstVisiblePosition > 3) {
+                    binding.fabScrollTop.show()
+                } else {
+                    binding.fabScrollTop.hide()
+                }
+            }
+        })
+    }
+
+    /**
+     * Toggle between grid and list view
+     */
+    private fun toggleViewMode() {
+        isGridView = !isGridView
+        binding.rvWatchlist.layoutManager = if (isGridView) {
+            GridLayoutManager(this, 2)
+        } else {
+            LinearLayoutManager(this)
+        }
+
+        // Update icon
+        binding.btnViewMode.setIconResource(
+            if (isGridView) android.R.drawable.ic_menu_view else android.R.drawable.ic_menu_agenda
+        )
+
+        Snackbar.make(
+            binding.root,
+            if (isGridView) "Grid view" else "List view",
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
+
+    /**
+     * Show sort dialog
+     */
+    private fun showSortDialog() {
+        val sortOptions = arrayOf(
+            "Date Added (Newest)",
+            "Date Added (Oldest)",
+            "Title (A-Z)",
+            "Title (Z-A)",
+            "Rating (High to Low)",
+            "Rating (Low to High)"
+        )
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Sort Watchlist")
+            .setItems(sortOptions) { _, which ->
+                val sortMessage = when (which) {
+                    0 -> "Sorted by newest first"
+                    1 -> "Sorted by oldest first"
+                    2 -> "Sorted by title A-Z"
+                    3 -> "Sorted by title Z-A"
+                    4 -> "Sorted by rating (high to low)"
+                    5 -> "Sorted by rating (low to high)"
+                    else -> "Sorted"
+                }
+                Snackbar.make(binding.root, sortMessage, Snackbar.LENGTH_SHORT).show()
+                // TODO: Implement actual sorting logic
+            }
+            .show()
     }
 
     private fun setupBottomNavigation() {
@@ -120,19 +218,26 @@ class WatchlistActivity : AppCompatActivity() {
                     is WatchlistState.Success -> {
                         binding.progressBar.gone()
                         binding.swipeRefresh.isRefreshing = false
-                        
+
                         // Update stats
                         binding.tvTotalMovies.text = state.watchlist.size.toString()
                         // Mock hours calculation (e.g., avg 2h per movie)
-                        binding.tvTotalHours.text = "${state.watchlist.size * 2}h"
-                        
+                        val totalHours = state.watchlist.size * 2
+                        binding.tvTotalHours.text = "${totalHours}h"
+
+                        // Calculate average rating (mock - assume 8.5 average)
+                        val avgRating = if (state.watchlist.isNotEmpty()) 8.5 else 0.0
+                        binding.tvAvgRating.text = String.format("%.1f", avgRating)
+
                         if (state.watchlist.isNotEmpty()) {
                             adapter.submitList(state.watchlist)
                             binding.rvWatchlist.visible()
                             binding.emptyState.gone()
+                            binding.statsCard.visible()
                         } else {
                             binding.rvWatchlist.gone()
                             binding.emptyState.visible()
+                            binding.statsCard.gone()
                         }
                     }
                     is WatchlistState.Error -> {

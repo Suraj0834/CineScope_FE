@@ -5,9 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/spacing_sm"
-    app:cardCornerRadius="@dimen/corner_radius_lg"
-    app:cardElevation="@dimen/elevation_md"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="0dp"
     app:cardBackgroundColor="@color/md_theme_surface"
     android:foreground="?attr/selectableItemBackground">
 
@@ -15,37 +16,125 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Movie Poster -->
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivPoster"
+        <!-- Poster Container with Overlay -->
+        <FrameLayout
+            android:id="@+id/posterContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/movie_poster"
             app:layout_constraintDimensionRatio="2:3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Movie Poster -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivPoster"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/movie_poster"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Cinescope.TopRounded"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <!-- Enhanced Gradient Overlay -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/gradient_overlay" />
+
+            <!-- Quick Actions Container (bottom overlay) -->
+            <LinearLayout
+                android:id="@+id/quickActionsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="8dp"
+                android:visibility="gone"
+                tools:visibility="gone">
+
+                <!-- Watchlist Button -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnWatchlist"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="@color/md_theme_surface">
+
+                    <ImageView
+                        android:id="@+id/ivWatchlistIcon"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@android:drawable/ic_input_add"
+                        app:tint="@color/md_theme_primary"
+                        android:contentDescription="@string/add_to_watchlist" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Favorite Button -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnFavorite"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="@color/md_theme_surface">
+
+                    <ImageView
+                        android:id="@+id/ivFavoriteIcon"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@android:drawable/btn_star"
+                        app:tint="@color/md_theme_error"
+                        android:contentDescription="@string/add_to_watchlist" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Trending/New Badge (top-left) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/trendingBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="6dp"
+            app:cardElevation="3dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/md_theme_error"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Cinescope.TopRounded"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            android:visibility="gone"
+            tools:visibility="gone">
 
-        <!-- Gradient Overlay -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:background="@drawable/gradient_overlay"
-            app:layout_constraintBottom_toBottomOf="@id/ivPoster"
-            app:layout_constraintEnd_toEndOf="@id/ivPoster"
-            app:layout_constraintStart_toStartOf="@id/ivPoster" />
+            <TextView
+                android:id="@+id/tvBadgeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="@string/trending"
+                android:textSize="9sp"
+                android:textColor="@color/md_theme_onError"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"
+                tools:text="NEW" />
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Rating Badge -->
+        <!-- Rating Badge (top-right) -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/ratingBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_sm"
-            app:cardCornerRadius="@dimen/corner_radius_sm"
-            app:cardElevation="@dimen/elevation_sm"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp"
             app:cardBackgroundColor="@color/md_theme_primaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -55,15 +144,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingStart="@dimen/spacing_sm"
-                android:paddingEnd="@dimen/spacing_sm"
-                android:paddingTop="@dimen/spacing_xs"
-                android:paddingBottom="@dimen/spacing_xs">
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp">
 
                 <ImageView
-                    android:layout_width="@dimen/icon_size_sm"
-                    android:layout_height="@dimen/icon_size_sm"
-                    android:src="@android:drawable/star_on"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@android:drawable/btn_star_big_on"
                     app:tint="@color/rating_gold"
                     android:contentDescription="@string/rating" />
 
@@ -71,10 +158,11 @@
                     android:id="@+id/tvRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_xs"
+                    android:layout_marginStart="4dp"
                     android:textAppearance="@style/TextAppearance.Cinescope.LabelMedium"
                     android:textColor="@color/md_theme_onPrimaryContainer"
                     android:textStyle="bold"
+                    android:textSize="13sp"
                     tools:text="8.5" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -84,10 +172,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_md"
+            android:padding="12dp"
+            android:background="@color/md_theme_surface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivPoster">
+            app:layout_constraintTop_toBottomOf="@id/posterContainer">
 
             <!-- Movie Title -->
             <TextView
@@ -96,34 +185,40 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.Cinescope.TitleSmall"
                 android:textColor="@color/md_theme_onSurface"
+                android:textStyle="bold"
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:lineSpacingExtra="2dp"
                 tools:text="The Shawshank Redemption" />
 
-            <!-- Year and Genres -->
+            <!-- Metadata Row: Year • Genre • Runtime -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/spacing_xs"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical">
 
+                <!-- Year -->
                 <TextView
                     android:id="@+id/tvYear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
                     android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:textSize="12sp"
                     tools:text="1994" />
 
+                <!-- Dot Separator 1 -->
                 <View
-                    android:layout_width="4dp"
-                    android:layout_height="4dp"
-                    android:layout_marginStart="@dimen/spacing_sm"
-                    android:layout_marginEnd="@dimen/spacing_sm"
+                    android:id="@+id/dotSeparator1"
+                    android:layout_width="3dp"
+                    android:layout_height="3dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/dot_separator" />
 
+                <!-- Genre -->
                 <TextView
                     android:id="@+id/tvGenre"
                     android:layout_width="0dp"
@@ -131,10 +226,65 @@
                     android:layout_weight="1"
                     android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
                     android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:textSize="12sp"
                     android:maxLines="1"
                     android:ellipsize="end"
                     tools:text="Drama" />
+
+                <!-- Dot Separator 2 (optional) -->
+                <View
+                    android:id="@+id/dotSeparator2"
+                    android:layout_width="3dp"
+                    android:layout_height="3dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/dot_separator"
+                    android:visibility="gone"
+                    tools:visibility="gone" />
+
+                <!-- Runtime (optional) -->
+                <TextView
+                    android:id="@+id/tvRuntime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    tools:text="2h 22m"
+                    tools:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Popularity/Vote Count Row (optional) -->
+            <LinearLayout
+                android:id="@+id/popularityLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                tools:visibility="gone">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@android:drawable/ic_menu_view"
+                    app:tint="@color/md_theme_primary"
+                    android:alpha="0.7"
+                    android:contentDescription="@string/popularity" />
+
+                <TextView
+                    android:id="@+id/tvPopularity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:textSize="11sp"
+                    tools:text="1.2K votes" />
             </LinearLayout>
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

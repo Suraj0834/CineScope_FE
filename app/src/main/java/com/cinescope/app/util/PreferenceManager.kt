@@ -58,4 +58,20 @@ class PreferenceManager(context: Context) {
     fun isLoggedIn(): Boolean {
         return getToken() != null
     }
+
+    fun setNotificationsEnabled(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean("notifications_enabled", enabled).apply()
+    }
+
+    fun isNotificationsEnabled(): Boolean {
+        return sharedPreferences.getBoolean("notifications_enabled", true)
+    }
+
+    fun setDarkModeEnabled(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean("dark_mode_enabled", enabled).apply()
+    }
+
+    fun isDarkModeEnabled(): Boolean {
+        return sharedPreferences.getBoolean("dark_mode_enabled", true)
+    }
 }

@@ -2,96 +2,206 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="160dp"
+    android:layout_width="180dp"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/spacing_md"
-    app:cardCornerRadius="@dimen/corner_radius_md"
-    app:cardElevation="@dimen/elevation_sm"
-    app:cardBackgroundColor="@color/md_theme_surfaceVariant"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@color/md_theme_surface"
     android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_md">
+        android:orientation="vertical">
 
-        <!-- Platform Icon Placeholder -->
-        <ImageView
-            android:id="@+id/ivSourceIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@android:drawable/ic_menu_view"
-            app:tint="@color/md_theme_primary"
-            android:contentDescription="Streaming platform" />
-
-        <TextView
-            android:id="@+id/tvSourceName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_sm"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/md_theme_onSurface"
-            android:gravity="center"
-            android:maxLines="1"
-            android:ellipsize="end"
-            tools:text="Netflix" />
-
-        <TextView
-            android:id="@+id/tvSourceType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textSize="11sp"
-            android:textColor="@color/md_theme_onSurfaceVariant"
-            android:gravity="center"
-            tools:text="Subscription" />
-
-        <TextView
-            android:id="@+id/tvSourcePrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_sm"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/md_theme_primary"
-            android:gravity="center"
-            tools:text="$12.99" />
-
+        <!-- Header Section with Platform Info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_xs"
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            android:background="@color/md_theme_surfaceVariant"
+            android:padding="14dp"
             android:gravity="center">
 
+            <!-- Platform Icon with Circle Background -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/md_theme_surface">
+
+                <ImageView
+                    android:id="@+id/ivSourceIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_menu_view"
+                    app:tint="@color/md_theme_primary"
+                    android:contentDescription="@string/streaming_platform" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- Platform Name -->
             <TextView
-                android:id="@+id/tvSourceFormat"
+                android:id="@+id/tvSourceName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/md_theme_onSurface"
+                android:gravity="center"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Netflix" />
+
+            <!-- Type Badge -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/typeBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:textColor="@color/md_theme_onSurfaceVariant"
-                android:paddingEnd="4dp"
-                tools:text="HD" />
+                android:layout_marginTop="6dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/md_theme_primaryContainer">
 
-            <View
-                android:layout_width="3dp"
-                android:layout_height="3dp"
-                android:background="@drawable/dot_separator" />
-
-            <TextView
-                android:id="@+id/tvSourceRegion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:textColor="@color/md_theme_onSurfaceVariant"
-                android:paddingStart="4dp"
-                tools:text="US" />
-
+                <TextView
+                    android:id="@+id/tvSourceType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:letterSpacing="0.03"
+                    tools:text="SUBSCRIPTION" />
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
+        <!-- Pricing Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp"
+            android:gravity="center">
+
+            <!-- Price Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price_starting_at"
+                android:textSize="10sp"
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:alpha="0.8" />
+
+            <!-- Price in INR -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₹"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_theme_primary" />
+
+                <TextView
+                    android:id="@+id/tvSourcePrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_theme_primary"
+                    tools:text="649" />
+
+                <TextView
+                    android:id="@+id/tvPricePeriod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:visibility="gone"
+                    tools:text="/mo"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <!-- Quality & Region Info -->
+            <LinearLayout
+                android:id="@+id/metadataLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <!-- Quality Badge -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/qualityBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/md_theme_outline"
+                    app:cardBackgroundColor="@android:color/transparent">
+
+                    <TextView
+                        android:id="@+id/tvSourceFormat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="3dp"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/md_theme_onSurface"
+                        tools:text="4K" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Dot Separator -->
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="3dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/dot_separator" />
+
+                <!-- Region -->
+                <TextView
+                    android:id="@+id/tvSourceRegion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="11sp"
+                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    tools:text="IN" />
+            </LinearLayout>
+
+            <!-- Watch Now Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnWatchNow"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/watch_now"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:icon="@android:drawable/ic_media_play"
+                app:iconSize="16dp"
+                app:iconGravity="textStart"
+                app:cornerRadius="10dp"
+                style="@style/Widget.Material3.Button.ElevatedButton" />
+        </LinearLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

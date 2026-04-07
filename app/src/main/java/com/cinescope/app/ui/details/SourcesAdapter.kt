@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cinescope.app.data.model.WatchmodeSource
 import com.cinescope.app.databinding.ItemWatchmodeSourceBinding
+import com.cinescope.app.util.Constants
 import com.google.android.material.snackbar.Snackbar
 
 class SourcesAdapter : ListAdapter<WatchmodeSource, SourcesAdapter.SourceViewHolder>(SourceDiffCallback()) {
@@ -32,43 +33,73 @@ class SourcesAdapter : ListAdapter<WatchmodeSource, SourcesAdapter.SourceViewHol
         
         fun bind(source: WatchmodeSource) {
             binding.apply {
+                // Platform name
                 tvSourceName.text = source.name
-                tvSourceType.text = when(source.type.lowercase()) {
-                    "sub" -> "Subscription"
-                    "rent" -> "Rent"
-                    "buy" -> "Buy"
-                    else -> source.type.replaceFirstChar { it.uppercase() }
+
+                // Type badge with uppercase text
+                val typeText = when(source.type.lowercase()) {
+                    "sub" -> "SUBSCRIPTION"
+                    "rent" -> "RENT"
+                    "buy" -> "BUY"
+                    else -> source.type.uppercase()
                 }
-                tvSourceRegion.text = source.region ?: "IN"
+                tvSourceType.text = typeText
+
+                // Region
+                tvSourceRegion.text = source.region?.uppercase() ?: "IN"
+
+                // Quality/Format badge
                 tvSourceFormat.text = source.format?.uppercase() ?: "HD"
-                tvSourcePrice.text = if (source.price != null && source.price > 0) {
-                    "₹${source.price.toInt()}"
-                } else {
-                    "Included"
-                }
-                
-                // Handle click to open streaming source URL
-                root.setOnClickListener {
-                    val url = source.webUrl
-                    if (!url.isNullOrEmpty()) {
-                        try {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            root.context.startActivity(intent)
-                        } catch (e: Exception) {
-                            Snackbar.make(
-                                root,
-                                "Unable to open ${source.name}",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                        }
+
+                // Price display (backend already sends prices in INR)
+                if (source.price != null && source.price > 0) {
+                    // Display price as-is (backend already converted to INR)
+                    tvSourcePrice.text = source.price.toInt().toString()
+
+                    // Show price period for subscriptions
+                    if (source.type.lowercase() == "sub") {
+                        tvPricePeriod.text = "/mo"
+                        tvPricePeriod.visibility = android.view.View.VISIBLE
                     } else {
-                        Snackbar.make(
-                            root,
-                            "No URL available for ${source.name}",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                        tvPricePeriod.visibility = android.view.View.GONE
                     }
+                } else {
+                    // Free/Included
+                    tvSourcePrice.text = "0"
+                    tvPricePeriod.visibility = android.view.View.GONE
                 }
+
+                // Watch Now button click
+                btnWatchNow.setOnClickListener {
+                    openStreamingSource(source)
+                }
+
+                // Card click
+                root.setOnClickListener {
+                    openStreamingSource(source)
+                }
+            }
+        }
+
+        private fun openStreamingSource(source: WatchmodeSource) {
+            val url = source.webUrl
+            if (!url.isNullOrEmpty()) {
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    binding.root.context.startActivity(intent)
+                } catch (e: Exception) {
+                    Snackbar.make(
+                        binding.root,
+                        "Unable to open ${source.name}",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    "Available on ${source.name}",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }

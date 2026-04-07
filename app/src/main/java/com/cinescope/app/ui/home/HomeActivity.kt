@@ -29,29 +29,31 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 
 class HomeActivity : AppCompatActivity() {
-    
+
     private lateinit var binding: ActivityHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var preferenceManager: PreferenceManager
     private var searchJob: Job? = null
     private var currentFilter = "trending"
-    
+    private var isGridView = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         preferenceManager = PreferenceManager(this)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        
+
         setupRecyclerView()
         setupViews()
+        setupTopBar()
         setupFilters()
         setupBottomNavigation()
         observeViewModel()
         applyTranslations() // Apply translations to UI
-        
+
         if (NetworkUtils.isNetworkAvailable(this)) {
             viewModel.loadTrending()
         } else {
@@ -69,6 +71,8 @@ class HomeActivity : AppCompatActivity() {
         binding.apply {
             etSearch.hint = com.cinescope.app.ailang.AiLang.t("search_movies")
             chipTrending.text = com.cinescope.app.ailang.AiLang.t("trending")
+            chipPopular.text = com.cinescope.app.ailang.AiLang.t("popular")
+            chipTopRated.text = com.cinescope.app.ailang.AiLang.t("top_rated")
             chipAction.text = com.cinescope.app.ailang.AiLang.t("action")
             chipComedy.text = com.cinescope.app.ailang.AiLang.t("comedy")
             chipDrama.text = com.cinescope.app.ailang.AiLang.t("drama")
@@ -76,6 +80,135 @@ class HomeActivity : AppCompatActivity() {
             chipThriller.text = com.cinescope.app.ailang.AiLang.t("thriller")
             chipWatchlist.text = com.cinescope.app.ailang.AiLang.t("my_watchlist")
         }
+    }
+
+    /**
+     * Setup top bar action buttons
+     */
+    private fun setupTopBar() {
+        // AI Chat button
+        binding.btnAiChat.setOnClickListener {
+            // TODO: Open AI Chat Activity
+            Snackbar.make(binding.root, "AI Chat - Coming soon!", Snackbar.LENGTH_SHORT).show()
+        }
+
+        // Notifications button
+        binding.btnNotifications.setOnClickListener {
+            // TODO: Open Notifications
+            Snackbar.make(binding.root, "Notifications - Coming soon!", Snackbar.LENGTH_SHORT).show()
+        }
+
+        // Profile button
+        binding.btnProfile.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
+
+        // View mode toggle
+        binding.btnViewMode.setOnClickListener {
+            toggleViewMode()
+        }
+
+        // Filter button
+        binding.btnFilter.setOnClickListener {
+            showFilterDialog()
+        }
+
+        // Scroll to top FAB
+        binding.fabScrollTop.setOnClickListener {
+            binding.rvMovies.smoothScrollToPosition(0)
+            binding.fabScrollTop.gone()
+        }
+
+        // Voice search button
+        binding.btnVoiceSearch.setOnClickListener {
+            // TODO: Implement voice search
+            Snackbar.make(binding.root, "Voice search - Coming soon!", Snackbar.LENGTH_SHORT).show()
+        }
+
+        // Clear filters button
+        binding.btnClearFilters.setOnClickListener {
+            clearAllFilters()
+        }
+    }
+
+    /**
+     * Toggle between grid and list view
+     */
+    private fun toggleViewMode() {
+        isGridView = !isGridView
+        val layoutManager = if (isGridView) {
+            GridLayoutManager(this, 2)
+        } else {
+            androidx.recyclerview.widget.LinearLayoutManager(this)
+        }
+        binding.rvMovies.layoutManager = layoutManager
+
+        // Update icon
+        binding.btnViewMode.setImageResource(
+            if (isGridView) android.R.drawable.ic_menu_view
+            else android.R.drawable.ic_menu_agenda
+        )
+
+        // Show feedback
+        Snackbar.make(
+            binding.root,
+            if (isGridView) "Grid view" else "List view",
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
+
+    /**
+     * Show filter/sort dialog
+     */
+    private fun showFilterDialog() {
+        val options = arrayOf(
+            "Popular",
+            "Top Rated",
+            "Now Playing",
+            "Upcoming"
+        )
+
+        AlertDialog.Builder(this)
+            .setTitle("Quick Filters")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> loadPopular()
+                    1 -> loadTopRated()
+                    2 -> loadNowPlaying()
+                    3 -> loadUpcoming()
+                }
+            }
+            .show()
+    }
+
+    /**
+     * Clear all active filters
+     */
+    private fun clearAllFilters() {
+        binding.etSearch.text?.clear()
+        binding.chipTrending.isChecked = true
+        currentFilter = "trending"
+        viewModel.loadTrending()
+    }
+
+    private fun loadPopular() {
+        currentFilter = "popular"
+        binding.chipPopular.isChecked = true
+        viewModel.searchMovies("popular")
+    }
+
+    private fun loadTopRated() {
+        currentFilter = "top_rated"
+        binding.chipTopRated.isChecked = true
+        viewModel.searchMovies("top rated")
+    }
+
+    private fun loadNowPlaying() {
+        viewModel.searchMovies("now playing")
+    }
+
+    private fun loadUpcoming() {
+        viewModel.searchMovies("upcoming")
     }
     
     override fun onDestroy() {
@@ -123,26 +256,41 @@ class HomeActivity : AppCompatActivity() {
             intent.putExtra(Constants.EXTRA_MOVIE_TITLE, movie.title)
             startActivity(intent)
         }
-        
+
         binding.rvMovies.apply {
             layoutManager = GridLayoutManager(this@HomeActivity, 2)
             adapter = moviesAdapter
-            // Endless scroll - load more when approaching end
+
+            // Scroll listener for endless scrolling and FAB visibility
             addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
+
                     val lm = recyclerView.layoutManager as? GridLayoutManager ?: return
                     val visibleItemCount = lm.childCount
                     val totalItemCount = lm.itemCount
                     val firstVisibleItemPosition = lm.findFirstVisibleItemPosition()
 
-                    val threshold = 4
+                    // Show/hide FAB based on scroll position
+                    if (firstVisibleItemPosition > 10 && dy < 0) {
+                        // Scrolling up and past 10 items - show FAB
+                        binding.fabScrollTop.visible()
+                    } else if (dy > 0) {
+                        // Scrolling down - hide FAB
+                        binding.fabScrollTop.gone()
+                    } else if (firstVisibleItemPosition < 3) {
+                        // Near top - hide FAB
+                        binding.fabScrollTop.gone()
+                    }
 
-                    // Ask ViewModel to load next page when close to end and not already loading
+                    // Endless scroll - load more when approaching end
+                    val threshold = 4
                     if (!viewModel.isLoading() && !viewModel.isLastPage()) {
                         if ((visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - threshold)
                             && firstVisibleItemPosition >= 0
                         ) {
+                            // Show load more indicator
+                            binding.progressLoadMore.visible()
                             viewModel.loadTrending(loadMore = true)
                         }
                     }
@@ -221,7 +369,25 @@ class HomeActivity : AppCompatActivity() {
                 viewModel.loadTrending()
             }
         }
-        
+
+        // Popular
+        binding.chipPopular.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                currentFilter = "popular"
+                binding.etSearch.text?.clear()
+                searchByGenre("popular")
+            }
+        }
+
+        // Top Rated
+        binding.chipTopRated.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                currentFilter = "top_rated"
+                binding.etSearch.text?.clear()
+                searchByGenre("top rated")
+            }
+        }
+
         // Action
         binding.chipAction.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -229,7 +395,7 @@ class HomeActivity : AppCompatActivity() {
                 searchByGenre("action")
             }
         }
-        
+
         // Comedy
         binding.chipComedy.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -237,7 +403,7 @@ class HomeActivity : AppCompatActivity() {
                 searchByGenre("comedy")
             }
         }
-        
+
         // Drama
         binding.chipDrama.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -245,7 +411,7 @@ class HomeActivity : AppCompatActivity() {
                 searchByGenre("drama")
             }
         }
-        
+
         // Sci-Fi
         binding.chipSciFi.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -253,7 +419,7 @@ class HomeActivity : AppCompatActivity() {
                 searchByGenre("sci-fi")
             }
         }
-        
+
         // Thriller
         binding.chipThriller.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -261,7 +427,7 @@ class HomeActivity : AppCompatActivity() {
                 searchByGenre("thriller")
             }
         }
-        
+
         // Watchlist - Click listener only (not checkable)
         binding.chipWatchlist.setOnClickListener {
             val intent = Intent(this, WatchlistActivity::class.java)
@@ -291,17 +457,27 @@ class HomeActivity : AppCompatActivity() {
             viewModel.homeState.collect { state ->
                 when (state) {
                     is HomeState.Idle -> {
+                        binding.loadingState.gone()
                         binding.progressBar.gone()
+                        binding.progressLoadMore.gone()
                         binding.swipeRefresh.isRefreshing = false
                     }
                     is HomeState.Loading -> {
-                        binding.progressBar.visible()
+                        if (moviesAdapter.currentList.isEmpty()) {
+                            // Show full loading state for initial load
+                            binding.loadingState.visible()
+                            binding.progressBar.visible()
+                        }
+                        // Hide load more for initial load
+                        binding.progressLoadMore.gone()
                         binding.tvEmpty.gone()
                     }
                     is HomeState.Success -> {
+                        binding.loadingState.gone()
                         binding.progressBar.gone()
+                        binding.progressLoadMore.gone()
                         binding.swipeRefresh.isRefreshing = false
-                        
+
                         if (state.movies.isNotEmpty()) {
                             binding.tvEmpty.gone()
                             binding.rvMovies.visible()
@@ -312,9 +488,16 @@ class HomeActivity : AppCompatActivity() {
                         }
                     }
                     is HomeState.Error -> {
+                        binding.loadingState.gone()
                         binding.progressBar.gone()
+                        binding.progressLoadMore.gone()
                         binding.swipeRefresh.isRefreshing = false
-                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+
+                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG)
+                            .setAction("Retry") {
+                                refreshContent()
+                            }
+                            .show()
                     }
                 }
             }

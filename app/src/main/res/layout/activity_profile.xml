@@ -8,115 +8,184 @@
     android:background="@color/md_theme_background">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:elevation="0dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="@string/profile"
-            app:titleCentered="true"
-            app:titleTextColor="@color/md_theme_onBackground" />
+            android:layout_height="280dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/md_theme_surface"
+            app:expandedTitleMarginStart="20dp"
+            app:expandedTitleMarginBottom="24dp">
+
+            <!-- Cover Photo Background -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_collapseMode="parallax">
+
+                <!-- Gradient Background -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_overlay" />
+
+                <!-- Profile Image -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    app:cardCornerRadius="60dp"
+                    app:cardElevation="8dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_person_placeholder"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Cinescope.Circle" />
+                </androidx.cardview.widget.CardView>
+            </FrameLayout>
+
+            <!-- Toolbar -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:title="@string/profile"
+                app:titleCentered="true"
+                app:titleTextColor="@color/md_theme_onBackground">
+
+                <!-- Settings Icon -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSettings"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:icon="@android:drawable/ic_menu_manage"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconTint="@color/md_theme_onSurface"
+                    app:cornerRadius="20dp"
+                    style="@style/Widget.Material3.Button.IconButton" />
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingBottom="80dp"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_lg"
-            android:gravity="center_horizontal">
+            android:paddingBottom="24dp">
 
-            <!-- Profile Image -->
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/ivProfile"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="@dimen/spacing_xl"
-                android:src="@drawable/ic_person_placeholder"
-                android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.Cinescope.Circle"
-                app:strokeWidth="2dp"
-                app:strokeColor="@color/md_theme_primary" />
-
-            <!-- User Name -->
-            <TextView
-                android:id="@+id/tvUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_md"
-                android:textAppearance="@style/TextAppearance.Cinescope.HeadlineSmall"
-                android:textColor="@color/md_theme_onBackground"
-                android:textStyle="bold"
-                tools:text="John Doe" />
-
-            <!-- User Email -->
-            <TextView
-                android:id="@+id/tvUserEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_xs"
-                android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
-                android:textColor="@color/md_theme_onSurfaceVariant"
-                tools:text="john.doe@example.com" />
-
-            <!-- Edit Profile Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnEditProfile"
-                style="@style/Widget.Cinescope.Button.Outlined"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_lg"
-                android:text="@string/edit_profile"
-                app:icon="@android:drawable/ic_menu_edit" />
-
-            <!-- Stats Section -->
+            <!-- User Info Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/spacing_xxl"
-                android:baselineAligned="false">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="16dp">
 
-                <!-- Watchlist Stat -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardWatchlist"
-                    android:layout_width="0dp"
+                <!-- User Name -->
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="@dimen/spacing_sm"
-                    app:cardCornerRadius="@dimen/corner_radius_lg"
-                    app:cardBackgroundColor="@color/md_theme_surface"
-                    app:cardElevation="@dimen/elevation_sm">
+                    android:textAppearance="@style/TextAppearance.Cinescope.HeadlineMedium"
+                    android:textColor="@color/md_theme_onBackground"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    tools:text="John Doe" />
 
+                <!-- User Email -->
+                <TextView
+                    android:id="@+id/tvUserEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
+                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:gravity="center"
+                    tools:text="john.doe@example.com" />
+
+                <!-- Edit Profile Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/edit_profile"
+                    android:textSize="14sp"
+                    android:paddingHorizontal="24dp"
+                    app:icon="@android:drawable/ic_menu_edit"
+                    app:iconSize="18dp"
+                    app:cornerRadius="24dp"
+                    style="@style/Widget.Material3.Button.OutlinedButton" />
+            </LinearLayout>
+
+            <!-- Stats Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <!-- Watchlist Stat -->
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:id="@+id/cardWatchlist"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="vertical"
-                        android:padding="@dimen/spacing_lg"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:padding="12dp"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
-                            android:layout_width="@dimen/icon_size_md"
-                            android:layout_height="@dimen/icon_size_md"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@android:drawable/btn_star"
-                            app:tint="@color/md_theme_primary" />
+                            app:tint="@color/md_theme_primary"
+                            android:contentDescription="@string/watchlist" />
 
                         <TextView
                             android:id="@+id/tvWatchlistCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_sm"
-                            android:textAppearance="@style/TextAppearance.Cinescope.HeadlineSmall"
+                            android:layout_marginTop="8dp"
+                            android:textAppearance="@style/TextAppearance.Cinescope.TitleLarge"
                             android:textColor="@color/md_theme_onSurface"
                             android:textStyle="bold"
                             tools:text="42" />
@@ -125,42 +194,43 @@
                             android:id="@+id/tvWatchlistLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
                             android:text="@string/watchlist"
                             android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
                             android:textColor="@color/md_theme_onSurfaceVariant" />
                     </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
 
-                <!-- Favorites Stat -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardFavorites"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/spacing_sm"
-                    app:cardCornerRadius="@dimen/corner_radius_lg"
-                    app:cardBackgroundColor="@color/md_theme_surface"
-                    app:cardElevation="@dimen/elevation_sm">
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/md_theme_outlineVariant"
+                        android:layout_marginVertical="8dp" />
 
+                    <!-- Favorites Stat -->
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:id="@+id/cardFavorites"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:orientation="vertical"
-                        android:padding="@dimen/spacing_lg"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:padding="12dp"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
-                            android:layout_width="@dimen/icon_size_md"
-                            android:layout_height="@dimen/icon_size_md"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@android:drawable/btn_star_big_on"
-                            app:tint="@color/rating_gold" />
+                            app:tint="@color/rating_gold"
+                            android:contentDescription="@string/favorites" />
 
                         <TextView
                             android:id="@+id/tvFavoritesCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_sm"
-                            android:textAppearance="@style/TextAppearance.Cinescope.HeadlineSmall"
+                            android:layout_marginTop="8dp"
+                            android:textAppearance="@style/TextAppearance.Cinescope.TitleLarge"
                             android:textColor="@color/md_theme_onSurface"
                             android:textStyle="bold"
                             tools:text="18" />
@@ -169,190 +239,409 @@
                             android:id="@+id/tvFavoritesLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
                             android:text="@string/favorites"
                             android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
                             android:textColor="@color/md_theme_onSurfaceVariant" />
                     </LinearLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/md_theme_outlineVariant"
+                        android:layout_marginVertical="8dp" />
+
+                    <!-- Watch Time Stat -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@android:drawable/ic_menu_recent_history"
+                            app:tint="@color/md_theme_primary"
+                            android:contentDescription="@string/watch_time" />
+
+                        <TextView
+                            android:id="@+id/tvWatchTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textAppearance="@style/TextAppearance.Cinescope.TitleLarge"
+                            android:textColor="@color/md_theme_onSurface"
+                            android:textStyle="bold"
+                            tools:text="120h" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/watch_time"
+                            android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                            android:textColor="@color/md_theme_onSurfaceVariant" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Preferences Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="24dp"
+                android:paddingHorizontal="16dp">
+
+                <TextView
+                    android:id="@+id/tvSettingsLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preferences"
+                    android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
+                    android:textColor="@color/md_theme_onBackground"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Notifications -->
+                        <LinearLayout
+                            android:id="@+id/layoutNotifications"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="16dp"
+                            android:gravity="center_vertical"
+                            android:background="?attr/selectableItemBackground">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/ic_popup_reminder"
+                                app:tint="@color/md_theme_primary"
+                                android:contentDescription="@string/notifications" />
+
+                            <TextView
+                                android:id="@+id/tvNotificationsLabel"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/notifications"
+                                android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
+                                android:textColor="@color/md_theme_onSurface" />
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/switchNotifications"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/md_theme_outlineVariant"
+                            android:layout_marginHorizontal="16dp" />
+
+                        <!-- Dark Mode -->
+                        <LinearLayout
+                            android:id="@+id/layoutDarkMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="16dp"
+                            android:gravity="center_vertical"
+                            android:background="?attr/selectableItemBackground">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/ic_menu_day"
+                                app:tint="@color/md_theme_primary"
+                                android:contentDescription="@string/dark_mode" />
+
+                            <TextView
+                                android:id="@+id/tvDarkModeLabel"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/dark_mode"
+                                android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
+                                android:textColor="@color/md_theme_onSurface" />
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/switchDarkMode"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- Settings Section -->
-            <TextView
-                android:id="@+id/tvSettingsLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_xxl"
-                android:text="@string/settings"
-                android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
-                android:textColor="@color/md_theme_onBackground" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_md"
-                app:cardCornerRadius="@dimen/corner_radius_lg"
-                app:cardBackgroundColor="@color/md_theme_surface"
-                app:cardElevation="@dimen/elevation_sm">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- Notifications -->
-                    <LinearLayout
-                        android:id="@+id/layoutNotifications"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/spacing_lg"
-                        android:gravity="center_vertical"
-                        android:background="?attr/selectableItemBackground">
-
-                        <ImageView
-                            android:layout_width="@dimen/icon_size_md"
-                            android:layout_height="@dimen/icon_size_md"
-                            android:src="@android:drawable/ic_popup_reminder"
-                            app:tint="@color/md_theme_onSurface" />
-
-                        <TextView
-                            android:id="@+id/tvNotificationsLabel"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="@dimen/spacing_lg"
-                            android:text="@string/notifications"
-                            android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
-                            android:textColor="@color/md_theme_onSurface" />
-
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/switchNotifications"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/md_theme_outlineVariant" />
-
-                    <!-- Dark Mode -->
-                    <LinearLayout
-                        android:id="@+id/layoutDarkMode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/spacing_lg"
-                        android:gravity="center_vertical"
-                        android:background="?attr/selectableItemBackground">
-
-                        <ImageView
-                            android:layout_width="@dimen/icon_size_md"
-                            android:layout_height="@dimen/icon_size_md"
-                            android:src="@android:drawable/ic_menu_day"
-                            app:tint="@color/md_theme_onSurface" />
-
-                        <TextView
-                            android:id="@+id/tvDarkModeLabel"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="@dimen/spacing_lg"
-                            android:text="@string/dark_mode"
-                            android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
-                            android:textColor="@color/md_theme_onSurface" />
-
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/switchDarkMode"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true" />
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
             <!-- Language Section -->
-            <TextView
-                android:id="@+id/tvLanguageLabel"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_xxl"
-                android:text="@string/language"
-                android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
-                android:textColor="@color/md_theme_onBackground" />
+                android:orientation="vertical"
+                android:layout_marginTop="24dp"
+                android:paddingHorizontal="16dp">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_md"
-                app:cardCornerRadius="@dimen/corner_radius_lg"
-                app:cardBackgroundColor="@color/md_theme_surface"
-                app:cardElevation="@dimen/elevation_sm">
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvLanguageLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_lg">
+                    android:text="@string/language"
+                    android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
+                    android:textColor="@color/md_theme_onBackground"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Select Language"
-                        android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
-                        android:textColor="@color/md_theme_onSurfaceVariant" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="0dp">
 
-                    <Spinner
-                        android:id="@+id/spinnerLanguage"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="@dimen/spacing_sm" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_md"
-                        android:text="Or enter custom code (e.g. 'ja', 'ru')"
-                        android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
-                        android:textColor="@color/md_theme_onSurfaceVariant" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilCustomLang"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs">
+                        android:orientation="vertical"
+                        android:padding="20dp">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etCustomLang"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/select_language"
+                            android:textAppearance="@style/TextAppearance.Cinescope.LabelLarge"
+                            android:textColor="@color/md_theme_onSurfaceVariant" />
+
+                        <Spinner
+                            android:id="@+id/spinnerLanguage"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/custom_language_code"
+                            android:textAppearance="@style/TextAppearance.Cinescope.LabelMedium"
+                            android:textColor="@color/md_theme_onSurfaceVariant" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilCustomLang"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Language Code"
-                            android:inputType="text" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/language_code_hint"
+                            app:boxCornerRadiusBottomEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusTopStart="12dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnApplyLanguage"
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etCustomLang"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:maxLength="5" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnApplyLanguage"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/apply_language"
+                            app:cornerRadius="12dp"
+                            style="@style/Widget.Material3.Button" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- About Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="24dp"
+                android:paddingHorizontal="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about"
+                    android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
+                    android:textColor="@color/md_theme_onBackground"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_md"
-                        android:text="Apply Language" />
+                        android:orientation="vertical">
 
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        <!-- Privacy Policy -->
+                        <LinearLayout
+                            android:id="@+id/layoutPrivacy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="16dp"
+                            android:gravity="center_vertical"
+                            android:background="?attr/selectableItemBackground">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/ic_menu_info_details"
+                                app:tint="@color/md_theme_primary"
+                                android:contentDescription="@string/privacy_policy" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/privacy_policy"
+                                android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
+                                android:textColor="@color/md_theme_onSurface" />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@android:drawable/arrow_down_float"
+                                android:rotation="270"
+                                app:tint="@color/md_theme_onSurfaceVariant"
+                                android:contentDescription="@string/app_name" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/md_theme_outlineVariant"
+                            android:layout_marginHorizontal="16dp" />
+
+                        <!-- Terms & Conditions -->
+                        <LinearLayout
+                            android:id="@+id/layoutTerms"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="16dp"
+                            android:gravity="center_vertical"
+                            android:background="?attr/selectableItemBackground">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/ic_menu_agenda"
+                                app:tint="@color/md_theme_primary"
+                                android:contentDescription="@string/terms_conditions" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/terms_conditions"
+                                android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
+                                android:textColor="@color/md_theme_onSurface" />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@android:drawable/arrow_down_float"
+                                android:rotation="270"
+                                app:tint="@color/md_theme_onSurfaceVariant"
+                                android:contentDescription="@string/app_name" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/md_theme_outlineVariant"
+                            android:layout_marginHorizontal="16dp" />
+
+                        <!-- App Version -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="16dp"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/ic_menu_info_details"
+                                app:tint="@color/md_theme_primary"
+                                android:contentDescription="@string/version_info" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="16dp"
+                                android:text="@string/app_version"
+                                android:textAppearance="@style/TextAppearance.Cinescope.BodyLarge"
+                                android:textColor="@color/md_theme_onSurface" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/version_info"
+                                android:textAppearance="@style/TextAppearance.Cinescope.BodyMedium"
+                                android:textColor="@color/md_theme_onSurfaceVariant" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
             <!-- Logout Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
-                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_xl"
-                android:layout_marginBottom="@dimen/spacing_xl"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
                 android:text="@string/logout"
+                android:textSize="15sp"
                 android:textColor="@color/md_theme_error"
                 app:icon="@android:drawable/ic_lock_power_off"
-                app:iconTint="@color/md_theme_error" />
+                app:iconTint="@color/md_theme_error"
+                app:strokeColor="@color/md_theme_error"
+                app:strokeWidth="1dp"
+                app:cornerRadius="12dp"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

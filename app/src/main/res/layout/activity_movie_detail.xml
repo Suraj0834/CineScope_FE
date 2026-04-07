@@ -41,6 +41,22 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/gradient_overlay" />
 
+            <!-- Play Button Overlay -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabPlayTrailer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_media_play"
+                android:contentDescription="@string/app_name"
+                app:fabSize="normal"
+                app:fabCustomSize="64dp"
+                app:maxImageSize="32dp"
+                app:backgroundTint="@color/md_theme_primary"
+                app:tint="@color/md_theme_onPrimary"
+                app:elevation="8dp"
+                app:layout_collapseMode="parallax" />
+
             <!-- Toolbar -->
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -48,7 +64,32 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_back"
-                app:title="" />
+                app:title="">
+
+                <!-- Share Button -->
+                <ImageButton
+                    android:id="@+id/btnShare"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_share"
+                    app:tint="@android:color/white"
+                    android:contentDescription="@string/app_name" />
+
+                <!-- More Options Button -->
+                <ImageButton
+                    android:id="@+id/btnMore"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_more"
+                    app:tint="@android:color/white"
+                    android:contentDescription="@string/app_name" />
+            </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -185,6 +226,126 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- Stats Row -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                app:cardBackgroundColor="@color/md_theme_surfaceVariant"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center">
+
+                    <!-- Popularity -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/star_on"
+                            app:tint="@color/md_theme_primary"
+                            android:contentDescription="@string/app_name" />
+
+                        <TextView
+                            android:id="@+id/tvPopularity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="98%"
+                            android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
+                            android:textColor="@color/md_theme_onSurfaceVariant"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/popularity"
+                            android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                            android:textColor="@color/md_theme_onSurfaceVariant"
+                            android:alpha="0.7" />
+                    </LinearLayout>
+
+                    <!-- Votes -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            app:tint="@color/md_theme_primary"
+                            android:contentDescription="@string/app_name" />
+
+                        <TextView
+                            android:id="@+id/tvVotes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="12K"
+                            android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
+                            android:textColor="@color/md_theme_onSurfaceVariant"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/votes"
+                            android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                            android:textColor="@color/md_theme_onSurfaceVariant"
+                            android:alpha="0.7" />
+                    </LinearLayout>
+
+                    <!-- Status -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/checkbox_on_background"
+                            app:tint="@color/md_theme_primary"
+                            android:contentDescription="@string/app_name" />
+
+                        <TextView
+                            android:id="@+id/tvStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Released"
+                            android:textAppearance="@style/TextAppearance.Cinescope.TitleMedium"
+                            android:textColor="@color/md_theme_onSurfaceVariant"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/status"
+                            android:textAppearance="@style/TextAppearance.Cinescope.BodySmall"
+                            android:textColor="@color/md_theme_onSurfaceVariant"
+                            android:alpha="0.7" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <!-- Action Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -195,26 +356,62 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnWatchlist"
-                    style="@style/Widget.Cinescope.Button"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="@dimen/spacing_sm"
-                    android:text="@string/add_to_watchlist"
+                    android:text="@string/watchlist"
                     app:icon="@android:drawable/btn_star"
-                    app:iconGravity="textStart" />
+                    app:iconGravity="textStart"
+                    app:cornerRadius="16dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnFavorite"
-                    style="@style/Widget.Cinescope.Button.Outlined"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:layout_weight="1"
                     android:layout_marginStart="@dimen/spacing_sm"
                     android:text="@string/favorite"
                     app:icon="@android:drawable/btn_star_big_on"
-                    app:iconGravity="textStart" />
+                    app:iconGravity="textStart"
+                    app:cornerRadius="16dp" />
             </LinearLayout>
+
+            <!-- Quick Info Chips -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                app:chipSpacing="8dp"
+                app:singleLine="false">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipDirector"
+                    style="@style/Widget.Material3.Chip.Assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/director"
+                    app:chipIcon="@android:drawable/ic_menu_myplaces" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipBudget"
+                    style="@style/Widget.Material3.Chip.Assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/budget"
+                    app:chipIcon="@android:drawable/ic_menu_info_details" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipRevenue"
+                    style="@style/Widget.Material3.Chip.Assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/revenue"
+                    app:chipIcon="@android:drawable/ic_menu_info_details" />
+            </com.google.android.material.chip.ChipGroup>
 
             <!-- Overview Section -->
             <TextView
