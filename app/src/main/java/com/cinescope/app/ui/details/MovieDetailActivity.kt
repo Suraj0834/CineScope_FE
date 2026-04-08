@@ -312,6 +312,14 @@ class MovieDetailActivity : AppCompatActivity() {
                         }
                     }
                 }
+
+                launch {
+                    viewModel.actionMessage.collect { message ->
+                        message?.let {
+                            Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
         }
     }

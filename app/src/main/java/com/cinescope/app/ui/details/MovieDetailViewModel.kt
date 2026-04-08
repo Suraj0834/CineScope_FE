@@ -144,15 +144,18 @@ class MovieDetailViewModel : BaseViewModel() {
     fun addToWatchlist() {
         val imdbId = currentImdbId ?: return
         val movieDetail = currentMovieDetail ?: return
-        
+
+        android.util.Log.d("MovieDetailViewModel", "addToWatchlist: imdbId=$imdbId, title=${movieDetail.title}")
         viewModelScope.launch {
             launchCatching(
                 onSuccess = {
+                    android.util.Log.d("MovieDetailViewModel", "addToWatchlist: Success!")
                     _actionMessage.value = "Added to watchlist"
                     // Refresh status
                     checkMovieStatus(imdbId)
                 },
                 onError = { error ->
+                    android.util.Log.e("MovieDetailViewModel", "addToWatchlist: Error", error)
                     _actionMessage.value = getErrorMessage(error)
                 }
             ) {
@@ -193,15 +196,18 @@ class MovieDetailViewModel : BaseViewModel() {
     fun addToFavorites() {
         val imdbId = currentImdbId ?: return
         val movieDetail = currentMovieDetail ?: return
-        
+
+        android.util.Log.d("MovieDetailViewModel", "addToFavorites: imdbId=$imdbId, title=${movieDetail.title}")
         viewModelScope.launch {
             launchCatching(
                 onSuccess = {
+                    android.util.Log.d("MovieDetailViewModel", "addToFavorites: Success!")
                     _actionMessage.value = "Added to favorites"
                     // Refresh status
                     checkMovieStatus(imdbId)
                 },
                 onError = { error ->
+                    android.util.Log.e("MovieDetailViewModel", "addToFavorites: Error", error)
                     _actionMessage.value = getErrorMessage(error)
                 }
             ) {
