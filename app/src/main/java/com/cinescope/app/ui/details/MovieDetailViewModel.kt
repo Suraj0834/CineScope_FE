@@ -64,11 +64,11 @@ class MovieDetailViewModel : BaseViewModel() {
 
             launchCatching(
                 onSuccess = { result ->
-                    android.util.Log.d("MovieDetailViewModel", "API call successful: ${result.success}, has data: ${result.data?.movie != null}")
-                    if (result.success && result.data?.movie != null) {
-                        currentMovieDetail = result.data.movie
-                        android.util.Log.d("MovieDetailViewModel", "Setting state to Success with movie: ${result.data.movie.title}")
-                        _detailState.value = MovieDetailState.Success(result.data.movie)
+                    android.util.Log.d("MovieDetailViewModel", "API call successful: ${result.success}, has data: ${result.data != null}")
+                    if (result.success && result.data != null) {
+                        currentMovieDetail = result.data
+                        android.util.Log.d("MovieDetailViewModel", "Setting state to Success with movie: ${result.data.title}")
+                        _detailState.value = MovieDetailState.Success(result.data)
                         android.util.Log.d("MovieDetailViewModel", "State is now: ${_detailState.value}")
                         // Also check movie status
                         checkMovieStatus(imdbId)

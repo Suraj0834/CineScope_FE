@@ -96,13 +96,17 @@ class MoviesRepository {
     }
     
     /**
-     * Get movie details by TMDB ID
+     * Get movie details by IMDB ID
      */
     suspend fun getMovieDetail(imdbId: String): Result<ApiResponse<MovieDetail>> {
         return try {
+            android.util.Log.d("MoviesRepository", "getMovieDetail: Calling API for imdbId=$imdbId")
             val response = moviesService.getMovieDetail(imdbId)
+            android.util.Log.d("MoviesRepository", "getMovieDetail: API response received: success=${response.success}, hasData=${response.data != null}")
+            android.util.Log.d("MoviesRepository", "getMovieDetail: Movie title=${response.data?.title}")
             Result.success(response)
         } catch (e: Exception) {
+            android.util.Log.e("MoviesRepository", "getMovieDetail: Exception caught", e)
             Result.failure(e)
         }
     }
