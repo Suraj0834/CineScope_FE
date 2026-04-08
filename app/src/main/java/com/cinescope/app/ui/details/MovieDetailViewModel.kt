@@ -57,25 +57,34 @@ class MovieDetailViewModel : BaseViewModel() {
      */
     fun loadMovieDetails(imdbId: String) {
         currentImdbId = imdbId
+        android.util.Log.d("MovieDetailViewModel", "loadMovieDetails called with imdbId: $imdbId")
         viewModelScope.launch {
             _detailState.value = MovieDetailState.Loading
-            
+            android.util.Log.d("MovieDetailViewModel", "State set to Loading")
+
             launchCatching(
                 onSuccess = { result ->
-                    if (result.success && result.data != null) {
-                        currentMovieDetail = result.data
-                        _detailState.value = MovieDetailState.Success(result.data)
+                    android.util.Log.d("MovieDetailViewModel", "API call successful: ${result.success}, has data: ${result.data?.movie != null}")
+                    if (result.success && result.data?.movie != null) {
+                        currentMovieDetail = result.data.movie
+                        android.util.Log.d("MovieDetailViewModel", "Setting state to Success with movie: ${result.data.movie.title}")
+                        _detailState.value = MovieDetailState.Success(result.data.movie)
+                        android.util.Log.d("MovieDetailViewModel", "State is now: ${_detailState.value}")
                         // Also check movie status
                         checkMovieStatus(imdbId)
                     } else {
+                        android.util.Log.e("MovieDetailViewModel", "API call failed or no data: ${result.message}")
                         _detailState.value = MovieDetailState.Error(result.message ?: "Failed to load movie details")
                     }
                 },
                 onError = { error ->
+                    android.util.Log.e("MovieDetailViewModel", "Error loading movie details", error)
                     _detailState.value = MovieDetailState.Error(getErrorMessage(error))
                 }
             ) {
+                android.util.Log.d("MovieDetailViewModel", "Making API call to getMovieDetail")
                 val response = moviesRepository.getMovieDetail(imdbId)
+                android.util.Log.d("MovieDetailViewModel", "API response received")
                 response.getOrThrow()
             }
         }

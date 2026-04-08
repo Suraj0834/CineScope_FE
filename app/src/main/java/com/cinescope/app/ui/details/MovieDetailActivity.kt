@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cinescope.app.R
 import com.cinescope.app.ailang.AiLang
@@ -252,61 +253,75 @@ class MovieDetailActivity : AppCompatActivity() {
     }
     
     private fun observeViewModel() {
+        // Use repeatOnLifecycle to ensure we catch all state updates
         lifecycleScope.launch {
-            viewModel.detailState.collect { state ->
-                when (state) {
-                    is MovieDetailState.Idle -> binding.progressBar.gone()
-                    is MovieDetailState.Loading -> {
-                        binding.progressBar.visible()
-                        binding.scrollContent.gone()
-                    }
-                    is MovieDetailState.Success -> {
-                        binding.progressBar.gone()
-                        binding.scrollContent.visible()
-                        displayMovieDetail(state.movieDetail)
-                    }
-                    is MovieDetailState.Error -> {
-                        binding.progressBar.gone()
-                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.detailState.collect { state ->
+                        android.util.Log.d("MovieDetailActivity", "State received: $state")
+                        when (state) {
+                            is MovieDetailState.Idle -> {
+                                binding.progressBar.gone()
+                            }
+                            is MovieDetailState.Loading -> {
+                                android.util.Log.d("MovieDetailActivity", "Loading state - showing progress")
+                                binding.progressBar.visible()
+                                binding.scrollContent.gone()
+                            }
+                            is MovieDetailState.Success -> {
+                                android.util.Log.d("MovieDetailActivity", "Success state - displaying movie: ${state.movieDetail.title}")
+                                binding.progressBar.gone()
+                                binding.scrollContent.visible()
+                                displayMovieDetail(state.movieDetail)
+                            }
+                            is MovieDetailState.Error -> {
+                                android.util.Log.e("MovieDetailActivity", "Error state: ${state.message}")
+                                binding.progressBar.gone()
+                                binding.scrollContent.gone()
+                                Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+                            }
+                        }
                     }
                 }
-            }
-        }
-        
-        lifecycleScope.launch {
-            viewModel.statusState.collect { state ->
-                when (state) {
-                    is MovieStatusState.Success -> {
-                        updateWatchlistButton(state.isInWatchlist)
-                        updateFavoriteButton(state.isInFavorites)
+
+                launch {
+                    viewModel.statusState.collect { state ->
+                        when (state) {
+                            is MovieStatusState.Success -> {
+                                updateWatchlistButton(state.isInWatchlist)
+                                updateFavoriteButton(state.isInFavorites)
+                            }
+                            else -> {}
+                        }
                     }
-                    else -> {}
                 }
-            }
-        }
-        
-        lifecycleScope.launch {
-            viewModel.summaryState.collect { state ->
-                when (state) {
-                    is SummaryState.Loading -> binding.btnAiSummary.isEnabled = false
-                    is SummaryState.Success -> {
-                        binding.btnAiSummary.isEnabled = true
-                        showAiSummaryDialog(state.summary)
+
+                launch {
+                    viewModel.summaryState.collect { state ->
+                        when (state) {
+                            is SummaryState.Loading -> binding.btnAiSummary.isEnabled = false
+                            is SummaryState.Success -> {
+                                binding.btnAiSummary.isEnabled = true
+                                showAiSummaryDialog(state.summary)
+                            }
+                            is SummaryState.Error -> {
+                                binding.btnAiSummary.isEnabled = true
+                                Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+                            }
+                            else -> binding.btnAiSummary.isEnabled = true
+                        }
                     }
-                    is SummaryState.Error -> {
-                        binding.btnAiSummary.isEnabled = true
-                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
-                    }
-                    else -> binding.btnAiSummary.isEnabled = true
                 }
             }
         }
     }
     
     private fun displayMovieDetail(detail: com.cinescope.app.data.model.MovieDetail) {
-        binding.apply {
-            // Poster URL (used for both poster and backdrop fallback)
-            val posterUrl = if (detail.posterPath != null) {
+        android.util.Log.d("MovieDetailActivity", "displayMovieDetail called for: ${detail.title}")
+        try {
+            binding.apply {
+                // Poster URL (used for both poster and backdrop fallback)
+                val posterUrl = if (detail.posterPath != null) {
                 if (detail.posterPath.startsWith("http")) {
                     detail.posterPath
                 } else {
@@ -384,6 +399,12 @@ class MovieDetailActivity : AppCompatActivity() {
             } else {
                 layoutWatchSources.gone()
             }
+        } // End binding.apply
+
+        android.util.Log.d("MovieDetailActivity", "displayMovieDetail completed successfully")
+        } catch (e: Exception) {
+            android.util.Log.e("MovieDetailActivity", "Error in displayMovieDetail", e)
+            Snackbar.make(binding.root, "Error displaying movie details: ${e.message}", Snackbar.LENGTH_LONG).show()
         }
     }
     
