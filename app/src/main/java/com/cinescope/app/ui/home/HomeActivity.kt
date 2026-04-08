@@ -36,6 +36,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var preferenceManager: PreferenceManager
     private var searchJob: Job? = null
     private var currentFilter = "trending"
+    private var currentSearchQuery: String? = null  // Track current search query
     private var isGridView = true
     private var isFirstResume = true
 
@@ -292,7 +293,14 @@ class HomeActivity : AppCompatActivity() {
                         ) {
                             // Show load more indicator
                             binding.progressLoadMore.visible()
-                            viewModel.loadTrending(loadMore = true)
+                            // Load more based on current state - IMPORTANT: Don't always load trending!
+                            // Search results don't support pagination, so skip endless scroll for search
+                            if (currentSearchQuery.isNullOrEmpty()) {
+                                // Only load more for trending (other filters use search which doesn't paginate)
+                                if (currentFilter == "trending") {
+                                    viewModel.loadTrending(loadMore = true)
+                                }
+                            }
                         }
                     }
                 }
@@ -329,12 +337,14 @@ class HomeActivity : AppCompatActivity() {
                     delay(500) // Debounce delay
                     val query = s.toString().trim()
                     if (query.isNotEmpty()) {
+                        currentSearchQuery = query  // Store current search query
                         if (NetworkUtils.isNetworkAvailable(this@HomeActivity)) {
                             viewModel.searchMovies(query)
                         } else {
                             Snackbar.make(binding.root, "No internet connection", Snackbar.LENGTH_SHORT).show()
                         }
                     } else {
+                        currentSearchQuery = null  // Clear search query
                         refreshContent()
                     }
                 }
@@ -366,6 +376,7 @@ class HomeActivity : AppCompatActivity() {
         binding.chipTrending.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 currentFilter = "trending"
+                currentSearchQuery = null  // Clear search query when switching filters
                 binding.etSearch.text?.clear()
                 viewModel.loadTrending()
             }
