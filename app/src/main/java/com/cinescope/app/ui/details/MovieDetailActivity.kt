@@ -58,8 +58,8 @@ class MovieDetailActivity : AppCompatActivity() {
             finish()
         }
         
-        // Listen for language changes
-        AiLang.addListener { recreate() }
+        // Listen for language changes - update UI instead of recreating
+        AiLang.addListener { applyTranslations() }
     }
     
     private fun applyTranslations() {
@@ -256,9 +256,13 @@ class MovieDetailActivity : AppCompatActivity() {
             viewModel.detailState.collect { state ->
                 when (state) {
                     is MovieDetailState.Idle -> binding.progressBar.gone()
-                    is MovieDetailState.Loading -> binding.progressBar.visible()
+                    is MovieDetailState.Loading -> {
+                        binding.progressBar.visible()
+                        binding.scrollContent.gone()
+                    }
                     is MovieDetailState.Success -> {
                         binding.progressBar.gone()
+                        binding.scrollContent.visible()
                         displayMovieDetail(state.movieDetail)
                     }
                     is MovieDetailState.Error -> {

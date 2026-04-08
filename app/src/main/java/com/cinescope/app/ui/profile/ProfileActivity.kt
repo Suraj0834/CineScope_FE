@@ -62,9 +62,9 @@ class ProfileActivity : AppCompatActivity() {
         
         viewModel.loadProfile()
 
-        // Listen for language changes to refresh UI
+        // Listen for language changes to refresh UI - update text instead of recreating
         AiLang.addListener {
-            recreate()
+            applyTranslations()
         }
     }
     

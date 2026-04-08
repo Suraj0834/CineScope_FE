@@ -61,10 +61,12 @@
         <!-- Main Activities -->
         <activity
             android:name="com.cinescope.app.ui.home.HomeActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
-            
+
         <activity
             android:name="com.cinescope.app.ui.details.MovieDetailActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
             
         <activity

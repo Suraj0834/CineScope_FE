@@ -53,8 +53,10 @@ class FavoritesActivity : AppCompatActivity() {
 
         viewModel.loadFavorites()
 
-        // Listen for language changes
-        AiLang.addListener { recreate() }
+        // Listen for language changes - update toolbar title instead of recreating
+        AiLang.addListener {
+            supportActionBar?.title = AiLang.t("my_favorites")
+        }
     }
 
     private fun setupToolbar() {

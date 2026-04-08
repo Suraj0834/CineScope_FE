@@ -37,6 +37,7 @@ class HomeActivity : AppCompatActivity() {
     private var searchJob: Job? = null
     private var currentFilter = "trending"
     private var isGridView = true
+    private var isFirstResume = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +61,9 @@ class HomeActivity : AppCompatActivity() {
             Snackbar.make(binding.root, com.cinescope.app.ailang.AiLang.t("error_generic"), Snackbar.LENGTH_LONG).show()
         }
 
-        // Listen for language changes
+        // Listen for language changes - update UI instead of recreating
         com.cinescope.app.ailang.AiLang.addListener {
-            recreate()
+            applyTranslations()
         }
     }
     
@@ -548,9 +549,11 @@ class HomeActivity : AppCompatActivity() {
     
     override fun onResume() {
         super.onResume()
-        // Refresh content when returning to this activity
-        if (binding.etSearch.text.isNullOrEmpty()) {
-            refreshContent()
+        // Only refresh on first resume to avoid unwanted refreshes when keyboard shows/hides
+        if (isFirstResume) {
+            isFirstResume = false
+            // Initial load is already done in onCreate, no need to refresh here
         }
+        // Note: Removed auto-refresh to prevent clearing search results when keyboard appears
     }
 }
