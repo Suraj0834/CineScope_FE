@@ -18,6 +18,7 @@ sealed class ProfileState {
         val favorites: List<Movie>
     ) : ProfileState()
     data class Error(val message: String) : ProfileState()
+    object Unauthorized : ProfileState()
 }
 
 class ProfileViewModel : BaseViewModel() {
@@ -30,29 +31,44 @@ class ProfileViewModel : BaseViewModel() {
     fun loadProfile() {
         viewModelScope.launch {
             _profileState.value = ProfileState.Loading
-            
+
             try {
+                android.util.Log.d("ProfileViewModel", "Loading profile data...")
                 val profileResult = repository.getProfile().getOrThrow()
+                android.util.Log.d("ProfileViewModel", "Profile result: success=${profileResult.success}")
+
                 val watchlistResult = repository.getWatchlist().getOrThrow()
+                android.util.Log.d("ProfileViewModel", "Watchlist loaded: ${watchlistResult.watchlist.size} items")
+
                 val favoritesResult = repository.getFavorites().getOrThrow()
-                
+                android.util.Log.d("ProfileViewModel", "Favorites loaded: ${favoritesResult.favorites.size} items")
+
                 if (profileResult.success && profileResult.data != null) {
                     _profileState.value = ProfileState.Success(
                         user = profileResult.data.user,
-                        watchlist = watchlistResult.watchlist.map { 
-                            Movie(imdbId = it.imdbId ?: "", title = it.title, posterPath = it.posterPath) 
+                        watchlist = watchlistResult.watchlist.map {
+                            Movie(imdbId = it.imdbId ?: "", title = it.title, posterPath = it.posterPath)
                         },
-                        favorites = favoritesResult.favorites.map { 
-                            Movie(imdbId = it.imdbId, title = it.title, posterPath = it.posterPath) 
+                        favorites = favoritesResult.favorites.map {
+                            Movie(imdbId = it.imdbId, title = it.title, posterPath = it.posterPath)
                         }
                     )
+                    android.util.Log.d("ProfileViewModel", "Profile state set to Success")
                 } else {
+                    android.util.Log.e("ProfileViewModel", "Profile load failed: ${profileResult.message}")
                     _profileState.value = ProfileState.Error(profileResult.message)
                 }
             } catch (e: Exception) {
-                _profileState.value = ProfileState.Error(
-                    e.message ?: "Failed to load profile"
-                )
+                android.util.Log.e("ProfileViewModel", "Error loading profile", e)
+
+                // Check if it's an authentication error
+                if (e is retrofit2.HttpException && e.code() == 401) {
+                    android.util.Log.w("ProfileViewModel", "401 Unauthorized - token invalid or expired")
+                    _profileState.value = ProfileState.Unauthorized
+                } else {
+                    val errorMessage = e.message ?: "Failed to load profile"
+                    _profileState.value = ProfileState.Error(errorMessage)
+                }
             }
         }
     }

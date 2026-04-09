@@ -27,9 +27,10 @@ object ApiClient {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(authInterceptor())
+                .addInterceptor(errorInterceptor())
                 .addInterceptor(loggingInterceptor())
                 .build()
-            
+
             retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .client(client)
@@ -42,7 +43,7 @@ object ApiClient {
     private fun authInterceptor() = Interceptor { chain ->
         val request = chain.request()
         val token = preferenceManager.getToken()
-        
+
         val newRequest = if (token != null) {
             request.newBuilder()
                 .addHeader("Authorization", "Bearer $token")
@@ -50,8 +51,23 @@ object ApiClient {
         } else {
             request
         }
-        
+
         chain.proceed(newRequest)
+    }
+
+    private fun errorInterceptor() = Interceptor { chain ->
+        val request = chain.request()
+        val response = chain.proceed(request)
+
+        // Log error responses
+        if (!response.isSuccessful) {
+            android.util.Log.w("ApiClient", "HTTP ${response.code} response for ${request.url}")
+            if (response.code == 401) {
+                android.util.Log.w("ApiClient", "401 Unauthorized - token may be invalid or expired")
+            }
+        }
+
+        response
     }
     
     private fun loggingInterceptor(): HttpLoggingInterceptor {

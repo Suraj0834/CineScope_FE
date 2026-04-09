@@ -44,7 +44,9 @@ class ProfileActivity : AppCompatActivity() {
         "Russian" to "ru",
         "Arabic" to "ar"
     )
-    
+
+    private var isFirstResume = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -67,7 +69,17 @@ class ProfileActivity : AppCompatActivity() {
             applyTranslations()
         }
     }
-    
+
+    override fun onResume() {
+        super.onResume()
+        // Skip first resume since onCreate already loads the data
+        if (!isFirstResume) {
+            android.util.Log.d("ProfileActivity", "onResume - reloading profile")
+            viewModel.loadProfile()
+        }
+        isFirstResume = false
+    }
+
     private fun applyTranslations() {
         // Apply AiLang translations to all text views
         binding.apply {
@@ -228,7 +240,19 @@ class ProfileActivity : AppCompatActivity() {
                         displayProfile(state)
                     }
                     is ProfileState.Error -> {
-                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG)
+                            .setAction("Retry") {
+                                viewModel.loadProfile()
+                            }
+                            .show()
+                    }
+                    is ProfileState.Unauthorized -> {
+                        android.util.Log.w("ProfileActivity", "Unauthorized - clearing token and redirecting to login")
+                        Snackbar.make(binding.root, "Session expired. Please login again.", Snackbar.LENGTH_SHORT).show()
+                        // Auto logout after a short delay
+                        binding.root.postDelayed({
+                            logout()
+                        }, 1000)
                     }
                     else -> {}
                 }
