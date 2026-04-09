@@ -80,6 +80,19 @@ data class MovieStatusResponse(
     val isInFavorites: Boolean
 )
 
+// Request for POST endpoints (add to list) - no action field needed
+data class AddToListRequest(
+    @SerializedName("imdbId")
+    val imdbId: String,
+
+    @SerializedName("title")
+    val title: String?,
+
+    @SerializedName("posterPath")
+    val posterPath: String?
+)
+
+// Legacy request for PUT endpoints (kept for backward compatibility)
 data class UpdateListRequest(
     @SerializedName("imdbId")
     val imdbId: String,

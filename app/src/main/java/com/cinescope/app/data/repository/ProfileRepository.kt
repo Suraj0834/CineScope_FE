@@ -54,23 +54,28 @@ class ProfileRepository {
      */
     suspend fun addToWatchlist(imdbId: String, title: String, posterPath: String?): Result<ApiResponse<Any>> {
         return try {
-            val request = UpdateListRequest(imdbId, "add", title, posterPath)
-            val response = profileService.updateWatchlist(request)
+            android.util.Log.d("ProfileRepository", "addToWatchlist: imdbId=$imdbId, title=$title")
+            val request = AddToListRequest(imdbId, title, posterPath)
+            val response = profileService.addToWatchlist(request)
+            android.util.Log.d("ProfileRepository", "addToWatchlist: response.success=${response.success}, message=${response.message}")
             Result.success(response)
         } catch (e: Exception) {
+            android.util.Log.e("ProfileRepository", "addToWatchlist: Error", e)
             Result.failure(e)
         }
     }
-    
+
     /**
      * Remove movie from watchlist
      */
     suspend fun removeFromWatchlist(imdbId: String): Result<ApiResponse<Any>> {
         return try {
-            val request = UpdateListRequest(imdbId, "remove", null, null)
-            val response = profileService.updateWatchlist(request)
+            android.util.Log.d("ProfileRepository", "removeFromWatchlist: imdbId=$imdbId")
+            val response = profileService.removeFromWatchlist(imdbId)
+            android.util.Log.d("ProfileRepository", "removeFromWatchlist: response.success=${response.success}")
             Result.success(response)
         } catch (e: Exception) {
+            android.util.Log.e("ProfileRepository", "removeFromWatchlist: Error", e)
             Result.failure(e)
         }
     }
@@ -96,23 +101,28 @@ class ProfileRepository {
      */
     suspend fun addToFavorites(imdbId: String, title: String, posterPath: String?): Result<ApiResponse<Any>> {
         return try {
-            val request = UpdateListRequest(imdbId, "add", title, posterPath)
-            val response = profileService.updateFavorites(request)
+            android.util.Log.d("ProfileRepository", "addToFavorites: imdbId=$imdbId, title=$title")
+            val request = AddToListRequest(imdbId, title, posterPath)
+            val response = profileService.addToFavorites(request)
+            android.util.Log.d("ProfileRepository", "addToFavorites: response.success=${response.success}, message=${response.message}")
             Result.success(response)
         } catch (e: Exception) {
+            android.util.Log.e("ProfileRepository", "addToFavorites: Error", e)
             Result.failure(e)
         }
     }
-    
+
     /**
      * Remove movie from favorites
      */
     suspend fun removeFromFavorites(imdbId: String): Result<ApiResponse<Any>> {
         return try {
-            val request = UpdateListRequest(imdbId, "remove", null, null)
-            val response = profileService.updateFavorites(request)
+            android.util.Log.d("ProfileRepository", "removeFromFavorites: imdbId=$imdbId")
+            val response = profileService.removeFromFavorites(imdbId)
+            android.util.Log.d("ProfileRepository", "removeFromFavorites: response.success=${response.success}")
             Result.success(response)
         } catch (e: Exception) {
+            android.util.Log.e("ProfileRepository", "removeFromFavorites: Error", e)
             Result.failure(e)
         }
     }

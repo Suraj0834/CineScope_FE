@@ -36,6 +36,7 @@ class FavoritesActivity : AppCompatActivity() {
 
     private var isGridView = true
     private var currentSortOption = SortOption.DATE_ADDED
+    private var isFirstResume = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +58,15 @@ class FavoritesActivity : AppCompatActivity() {
         AiLang.addListener {
             supportActionBar?.title = AiLang.t("my_favorites")
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Skip first resume since onCreate already loads the data
+        if (!isFirstResume) {
+            viewModel.loadFavorites()
+        }
+        isFirstResume = false
     }
 
     private fun setupToolbar() {

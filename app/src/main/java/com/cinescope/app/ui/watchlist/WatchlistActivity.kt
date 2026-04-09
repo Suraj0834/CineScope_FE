@@ -30,6 +30,7 @@ class WatchlistActivity : AppCompatActivity() {
     private lateinit var adapter: WatchlistAdapter
 
     private var isGridView = true
+    private var isFirstResume = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +51,15 @@ class WatchlistActivity : AppCompatActivity() {
         AiLang.addListener {
             supportActionBar?.title = AiLang.t("my_watchlist")
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Skip first resume since onCreate already loads the data
+        if (!isFirstResume) {
+            viewModel.loadWatchlist()
+        }
+        isFirstResume = false
     }
 
     private fun setupToolbar() {

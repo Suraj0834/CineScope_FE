@@ -2,7 +2,9 @@ package com.cinescope.app.data.api
 
 import com.cinescope.app.data.model.*
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -18,18 +20,28 @@ interface ProfileService {
     
     @GET("api/profile/watchlist")
     suspend fun getWatchlist(): ApiResponse<WatchlistResponse>
-    
-    @PUT("api/profile/watchlist")
-    suspend fun updateWatchlist(
-        @Body request: UpdateListRequest
+
+    @POST("api/profile/watchlist")
+    suspend fun addToWatchlist(
+        @Body request: AddToListRequest
     ): ApiResponse<Any>
-    
+
+    @DELETE("api/profile/watchlist/{imdbId}")
+    suspend fun removeFromWatchlist(
+        @Path("imdbId") imdbId: String
+    ): ApiResponse<Any>
+
     @GET("api/profile/favorites")
     suspend fun getFavorites(): ApiResponse<FavoritesResponse>
-    
-    @PUT("api/profile/favorites")
-    suspend fun updateFavorites(
-        @Body request: UpdateListRequest
+
+    @POST("api/profile/favorites")
+    suspend fun addToFavorites(
+        @Body request: AddToListRequest
+    ): ApiResponse<Any>
+
+    @DELETE("api/profile/favorites/{imdbId}")
+    suspend fun removeFromFavorites(
+        @Path("imdbId") imdbId: String
     ): ApiResponse<Any>
     
     @GET("api/profile/status/{imdbId}")
