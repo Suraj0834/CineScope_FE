@@ -2,6 +2,11 @@ package com.cinescope.app.data.model
 
 import com.google.gson.annotations.SerializedName
 
+data class MovieDetailResponse(
+    @SerializedName("movie")
+    val movie: MovieDetail
+)
+
 data class MovieDetail(
     @SerializedName("tmdbId")
     val tmdbId: Int,

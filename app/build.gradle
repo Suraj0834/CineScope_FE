@@ -84,6 +84,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     kapt 'com.github.bumptech.glide:compiler:4.15.1'
     
+    // Markwon for Markdown rendering
+    implementation libs.markwon.core
+    
     // Encrypted SharedPreferences
     implementation 'androidx.security:security-crypto:1.1.0-alpha06'
     
