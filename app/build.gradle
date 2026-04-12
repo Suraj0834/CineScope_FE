@@ -12,11 +12,11 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    namespace 'com.cinescope.app'
+    namespace 'com.mrnoone.cinescope'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.cinescope.app"
+        applicationId "com.mrnoone.cinescope"
         minSdk 21
         targetSdk 34
         versionCode 1

@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.cinescope.app.App"
+        android:name="com.mrnoone.cinescope.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -20,7 +20,7 @@
         
         <!-- Splash Screen -->
         <activity
-            android:name="com.cinescope.app.ui.splash.SplashActivity"
+            android:name="com.mrnoone.cinescope.ui.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -31,55 +31,55 @@
         
         <!-- Auth Activities -->
         <activity
-            android:name="com.cinescope.app.ui.auth.LoginActivity"
+            android:name="com.mrnoone.cinescope.ui.auth.LoginActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         
         <activity
-            android:name="com.cinescope.app.ui.auth.RegisterActivity"
+            android:name="com.mrnoone.cinescope.ui.auth.RegisterActivity"
             android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         
         <activity
-            android:name="com.cinescope.app.ui.auth.ForgotPasswordActivity"
+            android:name="com.mrnoone.cinescope.ui.auth.ForgotPasswordActivity"
             android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         
         <activity
-            android:name="com.cinescope.app.ui.auth.ResetPasswordActivity"
+            android:name="com.mrnoone.cinescope.ui.auth.ResetPasswordActivity"
             android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         
         <activity
-            android:name="com.cinescope.app.ui.watchlist.WatchlistActivity"
+            android:name="com.mrnoone.cinescope.ui.watchlist.WatchlistActivity"
             android:exported="false" />
         
         <activity
-            android:name="com.cinescope.app.ui.favorites.FavoritesActivity"
+            android:name="com.mrnoone.cinescope.ui.favorites.FavoritesActivity"
             android:exported="false" />
         
         <!-- Main Activities -->
         <activity
-            android:name="com.cinescope.app.ui.home.HomeActivity"
+            android:name="com.mrnoone.cinescope.ui.home.HomeActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
 
         <activity
-            android:name="com.cinescope.app.ui.details.MovieDetailActivity"
+            android:name="com.mrnoone.cinescope.ui.details.MovieDetailActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
             
         <activity
-            android:name="com.cinescope.app.ui.person.PersonDetailActivity"
+            android:name="com.mrnoone.cinescope.ui.person.PersonDetailActivity"
             android:exported="false" />
             
         <activity
-            android:name="com.cinescope.app.ui.profile.ProfileActivity"
+            android:name="com.mrnoone.cinescope.ui.profile.ProfileActivity"
             android:exported="false" />
 
         <!-- AI Chat -->
         <activity
-            android:name="com.cinescope.app.ui.chat.ChatActivity"
+            android:name="com.mrnoone.cinescope.ui.chat.ChatActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>
