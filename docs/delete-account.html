@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - CineScope</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .header .app-name {
+            font-size: 1.2em;
+            color: #764ba2;
+            font-weight: 600;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .contact-box h2 {
+            color: white;
+            border: none;
+            margin-top: 0;
+        }
+
+        .contact-box a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2em;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            transition: border-color 0.3s;
+        }
+
+        .contact-box a:hover {
+            border-bottom-color: white;
+        }
+
+        .steps {
+            counter-reset: step-counter;
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .steps li {
+            counter-increment: step-counter;
+            margin-bottom: 20px;
+            padding-left: 50px;
+            position: relative;
+        }
+
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Delete Your Account</h1>
+            <div class="app-name">CineScope - Your Movie Companion</div>
+        </div>
+
+        <section>
+            <h2>Account Deletion Request</h2>
+            <p>We're sorry to see you go! If you wish to delete your CineScope account and all associated data, please follow the instructions below.</p>
+        </section>
+
+        <section>
+            <h2>How to Request Account Deletion</h2>
+
+            <ol class="steps">
+                <li>
+                    <strong>Send an email</strong> to our support team at:
+                    <a href="mailto:support@cinescope.app">support@cinescope.app</a>
+                </li>
+
+                <li>
+                    <strong>Include in your email:</strong>
+                    <ul>
+                        <li>Subject line: "Account Deletion Request"</li>
+                        <li>The email address associated with your CineScope account</li>
+                        <li>Your full name (as registered in the app)</li>
+                        <li>Brief reason for deletion (optional but helpful)</li>
+                    </ul>
+                </li>
+
+                <li>
+                    <strong>Confirmation:</strong> You will receive a confirmation email within 48 hours acknowledging your request.
+                </li>
+
+                <li>
+                    <strong>Processing:</strong> Your account and data will be permanently deleted within 7 business days.
+                </li>
+
+                <li>
+                    <strong>Final notification:</strong> You will receive a final email confirming that your account has been deleted.
+                </li>
+            </ol>
+        </section>
+
+        <div class="warning-box">
+            <h3>⚠️ Important: This Action is Permanent</h3>
+            <p><strong>Account deletion is irreversible.</strong> Once your account is deleted, you will not be able to recover:</p>
+            <ul>
+                <li>Your watchlist and favorites</li>
+                <li>Your profile information</li>
+                <li>Your AI chat history</li>
+                <li>Any preferences or settings</li>
+            </ul>
+            <p><strong>All data will be permanently removed from our servers.</strong></p>
+        </div>
+
+        <section>
+            <h2>What Data Will Be Deleted</h2>
+
+            <p>When you delete your account, the following data will be permanently removed:</p>
+
+            <div class="highlight-box">
+                <h3>Personal Information</h3>
+                <ul>
+                    <li>Name</li>
+                    <li>Email address</li>
+                    <li>Encrypted password</li>
+                    <li>Account creation date</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>App Data</h3>
+                <ul>
+                    <li>Movies in your watchlist</li>
+                    <li>Movies in your favorites</li>
+                    <li>AI chat message history</li>
+                    <li>Search history (if stored)</li>
+                    <li>App preferences and settings</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Authentication Data</h3>
+                <ul>
+                    <li>Login tokens</li>
+                    <li>Session information</li>
+                    <li>Account credentials</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Data Retention</h2>
+
+            <p><strong>Immediate deletion:</strong> Most personal data is deleted immediately upon processing your request.</p>
+
+            <p><strong>Backup retention:</strong> For security and compliance purposes, encrypted backups may be retained for up to 30 days before permanent deletion. However, your account will be immediately deactivated and inaccessible.</p>
+
+            <p><strong>Legal retention:</strong> In rare cases, certain information may be retained if required by law, such as for legal proceedings or regulatory compliance. This does not include your personal watchlist, favorites, or chat history.</p>
+        </section>
+
+        <section>
+            <h2>Alternative: Data Export</h2>
+
+            <p>If you would like to download a copy of your data before deleting your account, please include this request in your deletion email. We will provide you with:</p>
+
+            <ul>
+                <li>Your profile information (JSON format)</li>
+                <li>Your watchlist (JSON/CSV format)</li>
+                <li>Your favorites (JSON/CSV format)</li>
+            </ul>
+
+            <p>Data export will be provided within 48 hours, and your account deletion will proceed after you confirm receipt.</p>
+        </section>
+
+        <section>
+            <h2>Instead of Deleting</h2>
+
+            <p>If you're considering deleting your account because of a specific issue, we'd love to help! You can:</p>
+
+            <ul>
+                <li><strong>Contact support:</strong> Email us about any problems you're experiencing</li>
+                <li><strong>Temporarily stop using the app:</strong> Your data will remain saved if you decide to return</li>
+                <li><strong>Clear specific data:</strong> You can manually remove movies from your watchlist or favorites within the app</li>
+            </ul>
+        </section>
+
+        <div class="contact-box">
+            <h2>Need Help?</h2>
+            <p>If you have questions about account deletion or data privacy:</p>
+            <p style="margin-top: 20px;">
+                <strong>Email:</strong> <a href="mailto:support@cinescope.app">support@cinescope.app</a>
+            </p>
+            <p style="margin-top: 15px;">
+                <strong>Privacy Policy:</strong><br>
+                <a href="https://suraj0834.github.io/CineScope_FE/privacy-policy.html" target="_blank">
+                    View Our Privacy Policy
+                </a>
+            </p>
+        </div>
+
+        <section style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #eee; text-align: center; color: #777; font-size: 0.9em;">
+            <p><strong>CineScope Development Team</strong></p>
+            <p>Last Updated: April 12, 2026</p>
+            <p>© 2026 CineScope. All rights reserved.</p>
+        </section>
+    </div>
+</body>
+</html>
