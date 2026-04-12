@@ -90,3 +90,8 @@ ui_ux_completion_report.md
 
 # Android folder (if duplicate)
 android/
+
+# Release signing keys - DO NOT COMMIT
+*.jks
+*.keystore
+keystore.properties
